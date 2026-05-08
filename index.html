@@ -1,0 +1,339 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Web Design Final</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ANIMATED BACKGROUND -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-logo">Portfolio</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+
+    <!-- TEXT BLOCK (top) -->
+    <div class="hero-content">
+      <div class="hero-eyebrow" id="mot-eyebrow" style="opacity:0;">Web Design · Class of 2025</div>
+      <h1 class="hero-name" id="hero-name">
+        <span class="line1" id="mot-line1" style="display:block;opacity:0;">YOUR</span>
+        <span class="line2" id="mot-line2" style="display:block;opacity:0;">NAME</span>
+      </h1>
+      <p class="hero-sub" id="mot-sub" style="opacity:0;max-width:520px;">
+        <strong>Web Designer & Developer</strong> — Marlboro High School Senior. Click a base to explore each chapter of the journey.
+      </p>
+      <div class="hero-ctas" id="mot-ctas" style="opacity:0;">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-secondary">Let's Connect <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- FIELD BLOCK (bottom) -->
+    <div id="hero-field-wrap">
+
+      <!-- Three.js renders here -->
+      <div id="three-container"></div>
+
+      <!-- HTML overlay buttons positioned over each base -->
+
+      <!-- Pitcher's Mound — Younger Me -->
+      <a href="younger.html" class="base-btn" id="btn-mound" style="left:50%;top:42%;">
+        <div class="base-btn-inner">
+          <div class="base-icon mound">⚾<br>YOUNGER<br>ME</div>
+          <div class="base-label">The Beginning</div>
+        </div>
+      </a>
+
+      <!-- 1st Base — Sophomore Year -->
+      <a href="sophomore.html" class="base-btn" id="btn-first" style="left:68%;top:58%;">
+        <div class="base-btn-inner">
+          <div class="base-icon gold">1ST<br>BASE</div>
+          <div class="base-year">Soph. Year</div>
+          <div class="base-label">2022–23</div>
+        </div>
+      </a>
+
+      <!-- 2nd Base — Junior Year -->
+      <a href="junior.html" class="base-btn" id="btn-second" style="left:50%;top:22%;">
+        <div class="base-btn-inner">
+          <div class="base-icon navy">2ND<br>BASE</div>
+          <div class="base-year">Junior Year</div>
+          <div class="base-label">2023–24</div>
+        </div>
+      </a>
+
+      <!-- 3rd Base — Senior Year -->
+      <a href="senior.html" class="base-btn" id="btn-third" style="left:32%;top:58%;">
+        <div class="base-btn-inner">
+          <div class="base-icon gold">3RD<br>BASE</div>
+          <div class="base-year">Senior Year</div>
+          <div class="base-label">2024–25</div>
+        </div>
+      </a>
+
+      <!-- Home Plate — Current / Seton Hall -->
+      <a href="current.html" class="base-btn" id="btn-home" style="left:50%;top:78%;">
+        <div class="base-btn-inner">
+          <div class="base-icon home">🏠<br>HOME</div>
+          <div class="base-year">Seton Hall</div>
+          <div class="base-label">Fall 2025 ✦</div>
+        </div>
+      </a>
+
+    </div><!-- /field-wrap -->
+
+    <div class="hero-scroll-hint" id="mot-scroll" style="position:absolute;bottom:1.5rem;left:4rem;z-index:10;opacity:0;">
+      <div class="scroll-line"></div>
+      Scroll to explore
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track" id="marquee">
+      <span class="marquee-item">HTML5 <span class="marquee-dot"></span></span>
+      <span class="marquee-item">CSS3 <span class="marquee-dot"></span></span>
+      <span class="marquee-item">JavaScript <span class="marquee-dot"></span></span>
+      <span class="marquee-item">UI Design <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Figma <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Responsive Design <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Animations <span class="marquee-dot"></span></span>
+      <span class="marquee-item">User Experience <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Adobe XD <span class="marquee-dot"></span></span>
+      <span class="marquee-item">React <span class="marquee-dot"></span></span>
+      <span class="marquee-item">HTML5 <span class="marquee-dot"></span></span>
+      <span class="marquee-item">CSS3 <span class="marquee-dot"></span></span>
+      <span class="marquee-item">JavaScript <span class="marquee-dot"></span></span>
+      <span class="marquee-item">UI Design <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Figma <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Responsive Design <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Animations <span class="marquee-dot"></span></span>
+      <span class="marquee-item">User Experience <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Adobe XD <span class="marquee-dot"></span></span>
+      <span class="marquee-item">React <span class="marquee-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="orb" style="width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(200,151,43,0.09),transparent 70%);animation:float 9s ease-in-out infinite;position:absolute;filter:blur(80px);pointer-events:none;z-index:0;"></div>
+    <div class="section-label reveal">About Me</div>
+    <h2 class="section-title reveal">Turning Ideas<br>Into Pixels</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm a <strong>senior at Marlboro High School</strong> with a passion for creating beautiful, functional web experiences. Through the Web Design Pathway, I've developed a deep love for crafting interfaces that look incredible and feel even better to use.</p>
+        <p>From sketching wireframes to writing clean code, I thrive at every step of the design process. I believe great design isn't just about aesthetics — it's about <strong>solving real problems</strong> with elegance and intention.</p>
+        <p>This fall, I'll be continuing my journey at <strong>Seton Hall University</strong>, where I'll push my skills even further. I'm excited to grow as a designer and developer in a field that's constantly evolving.</p>
+      </div>
+      <div class="about-stats reveal reveal-delay-2">
+        <div class="stat-card">
+          <div class="stat-number">4+</div>
+          <div class="stat-label">Years of Design</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">12+</div>
+          <div class="stat-label">Projects Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Passion Driven</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Ideas in Queue</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label reveal">Expertise</div>
+    <h2 class="section-title reveal">My Skill Set</h2>
+    <p class="skills-intro reveal">I've built a well-rounded toolkit across design and development — from writing semantic HTML to crafting pixel-perfect UI layouts.</p>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">🎨</div>
+        <div class="skill-name">HTML5 & Semantics</div>
+        <div class="skill-desc">Clean, accessible markup that forms the rock-solid foundation of every project.</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="95"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-icon">✨</div>
+        <div class="skill-name">CSS3 & Animations</div>
+        <div class="skill-desc">Flexbox, Grid, custom properties, keyframes — making things move and look great.</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-icon">⚡</div>
+        <div class="skill-name">JavaScript</div>
+        <div class="skill-desc">Interactive, dynamic experiences built with modern ES6+ and DOM manipulation.</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="82"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-3">
+        <div class="skill-icon">📐</div>
+        <div class="skill-name">UI/UX Design</div>
+        <div class="skill-desc">Wireframing, prototyping, and user flows that put the experience first.</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-icon">🖥️</div>
+        <div class="skill-name">Figma</div>
+        <div class="skill-desc">Components, auto-layout, and collaborative prototyping at a professional level.</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-icon">📱</div>
+        <div class="skill-name">Responsive Design</div>
+        <div class="skill-desc">Mobile-first mindset — every layout adapts beautifully across all screen sizes.</div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="92"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="orb" style="width:600px;height:600px;bottom:-200px;right:-200px;background:radial-gradient(circle,rgba(200,151,43,0.08),transparent 70%);animation:float 11s ease-in-out infinite reverse;position:absolute;filter:blur(80px);pointer-events:none;z-index:0;"></div>
+    <div class="section-label reveal">Work</div>
+    <h2 class="section-title reveal">Selected Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-glow" style="background:linear-gradient(135deg,rgba(0,32,91,0.08),transparent);"></div>
+        <div class="project-num">01</div>
+        <div class="project-tag">Web Design</div>
+        <h3 class="project-title">Local Business Redesign</h3>
+        <p class="project-desc">Redesigned the digital presence of a local NJ business — modernized UI, improved conversion flow, and made the site fully responsive.</p>
+        <div class="project-tech">
+          <span class="tech-pill">HTML</span>
+          <span class="tech-pill">CSS</span>
+          <span class="tech-pill">JavaScript</span>
+          <span class="tech-pill">Figma</span>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-glow" style="background:linear-gradient(135deg,rgba(200,151,43,0.06),transparent);"></div>
+        <div class="project-num">02</div>
+        <div class="project-tag">App Design</div>
+        <h3 class="project-title">Study Tracker App</h3>
+        <p class="project-desc">A productivity app UI designed and prototyped in Figma, with a fully interactive demo.</p>
+        <div class="project-tech">
+          <span class="tech-pill">Figma</span>
+          <span class="tech-pill">UI/UX</span>
+          <span class="tech-pill">Prototype</span>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-glow" style="background:linear-gradient(135deg,rgba(0,32,91,0.08),transparent);"></div>
+        <div class="project-num">03</div>
+        <div class="project-tag">E-Commerce</div>
+        <h3 class="project-title">Online Store Concept</h3>
+        <p class="project-desc">A full e-commerce layout with product pages, cart functionality, and smooth transitions — all built from scratch.</p>
+        <div class="project-tech">
+          <span class="tech-pill">HTML</span>
+          <span class="tech-pill">CSS Grid</span>
+          <span class="tech-pill">JS</span>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-glow" style="background:linear-gradient(135deg,rgba(200,151,43,0.06),transparent);"></div>
+        <div class="project-num">04</div>
+        <div class="project-tag">Web Animation</div>
+        <h3 class="project-title">Interactive Landing Page</h3>
+        <p class="project-desc">A high-energy landing page packed with scroll animations, parallax effects, and micro-interactions — pushing the limits of what CSS and JS can do.</p>
+        <div class="project-tech">
+          <span class="tech-pill">CSS Animations</span>
+          <span class="tech-pill">GSAP</span>
+          <span class="tech-pill">JavaScript</span>
+          <span class="tech-pill">Canvas API</span>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-label reveal">Education</div>
+    <h2 class="section-title reveal">Where I've<br>Learned & Grown</h2>
+    <div class="edu-grid">
+      <div class="edu-card reveal">
+        <div class="edu-school-badge">
+          <div class="edu-school-icon">🏫</div>
+          <div class="edu-school-name">Marlboro High School</div>
+        </div>
+        <div class="edu-degree">Web Design Pathway</div>
+        <div class="edu-meta">Marlboro, NJ · Class of 2025</div>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.8;font-weight:300;margin-bottom:1.5rem;">
+          Completed the full Web Design career pathway — mastering frontend development, UI/UX principles, and design tools used by professionals in the field.
+        </p>
+        <div class="edu-highlight">🎓 Pathway Graduate</div>
+      </div>
+      <div class="edu-card featured reveal reveal-delay-2">
+        <div class="pulse"></div>
+        <div class="edu-school-badge">
+          <div class="edu-school-icon" style="background:rgba(0,85,140,0.2);">🔵</div>
+          <div class="edu-school-name">Seton Hall University</div>
+        </div>
+        <div class="edu-degree">Incoming Freshman</div>
+        <div class="edu-meta">South Orange, NJ · Fall 2025</div>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.8;font-weight:300;margin-bottom:1.5rem;">
+          Continuing the journey at Seton Hall — ready to level up in a new environment, explore new disciplines, and bring everything I've learned to the next chapter.
+        </p>
+        <div class="edu-highlight">⚡ Coming This Fall</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="orb" style="width:500px;height:500px;top:0;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(0,32,91,0.3),transparent 70%);animation:float 8s ease-in-out infinite;position:absolute;filter:blur(80px);pointer-events:none;z-index:0;"></div>
+    <div class="contact-inner">
+      <div class="section-label reveal" style="justify-content:center;">Let's Talk</div>
+      <h2 class="section-title reveal" style="text-align:center;">Got a Project<br>in Mind?</h2>
+      <p class="contact-desc reveal">Whether you want to collaborate, hire me, or just say hi — my inbox is always open. Let's create something awesome together.</p>
+      <a href="mailto:yourname@email.com" class="contact-email reveal">yourname@email.com</a>
+      <div class="social-row reveal reveal-delay-2">
+        <a href="#" class="social-link">LinkedIn</a>
+        <a href="#" class="social-link">GitHub</a>
+        <a href="#" class="social-link">Behance</a>
+        <a href="#" class="social-link">Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-copy">© 2025 — All rights reserved</div>
+    <div class="footer-made">Made with <span>♥</span> in Marlboro, NJ</div>
+  </footer>
+
+  <!-- THREE.JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- MOTION.DEV -->
+  <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
+  <script src="script.js"></script>
+  </script>
+</body>
+</html>

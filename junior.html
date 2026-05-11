@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Junior Year — Portfolio</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;min-height:100%;background:#05070d;font-family:Arial,Helvetica,sans-serif;color:#eef0f5;}
+.page-wrap{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  color:#C8972B;text-decoration:none;font-size:.82rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid rgba(200,151,43,.4);
+  padding:.55rem 1.2rem;border-radius:4px;
+  transition:background .2s,color .2s;
+  margin-bottom:3rem;
+}
+.back-btn:hover{background:rgba(200,151,43,.12);}
+.badge{
+  display:inline-block;
+  background:rgba(0,32,91,.2);
+  border:1px solid rgba(0,80,200,.4);
+  color:#5a9fff;font-size:.72rem;letter-spacing:.18em;
+  text-transform:uppercase;padding:.4rem 1rem;
+  border-radius:50px;margin-bottom:1.5rem;
+}
+h1{
+  font-size:clamp(2.8rem,8vw,6rem);
+  line-height:.95;letter-spacing:.04em;
+  text-transform:uppercase;margin-bottom:1.5rem;
+}
+h1 span{color:#C8972B;}
+.sub{color:#9aabb8;font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:3rem;}
+.divider{width:60px;height:2px;background:#C8972B;margin-bottom:3rem;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(0,32,91,.4);
+  border-radius:8px;padding:1.6rem;
+}
+.card h3{font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:#5a9fff;margin-bottom:.6rem;}
+.card p{font-size:.88rem;color:#9aabb8;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <a href="index.html" class="back-btn">&#8592; Back to Field</a>
+
+  <div class="badge">2nd Base</div>
+  <h1>Junior <span>Year</span></h1>
+  <p class="sub">Halfway home — junior year marked deeper dives into code, more ambitious projects, and a clearer vision for the future.</p>
+  <div class="divider"></div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>Projects</h3>
+      <p>Add the projects you completed during junior year — more complex builds, collaborative work, or personal passion projects.</p>
+    </div>
+    <div class="card">
+      <h3>Growth Areas</h3>
+      <p>Describe how your skills evolved — new frameworks, design thinking, problem-solving approaches, or technical depth.</p>
+    </div>
+    <div class="card">
+      <h3>Highlights</h3>
+      <p>Share competitions, awards, courses, or experiences from junior year that defined your growth as a developer and designer.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

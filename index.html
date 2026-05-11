@@ -1,339 +1,918 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portfolio — Web Design Final</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Seton Hall Baseball Stadium</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#05070d;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+#hero-field-wrap{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+}
+
+canvas{
+  display:block;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+  text-align:center;
+}
+
+.overlay h1{
+  font-size:clamp(4rem,10vw,9rem);
+  line-height:.9;
+  letter-spacing:.08em;
+  color:#fff;
+  text-shadow:0 0 25px rgba(255,255,255,.25);
+}
+
+.overlay h1 span{
+  color:#C8972B;
+}
+
+.overlay p{
+  margin-top:18px;
+  color:#d8d8d8;
+  letter-spacing:.25em;
+  font-size:1rem;
+}
+
+#base-tooltip{
+  position:absolute;
+  pointer-events:none;
+  z-index:10;
+  background:rgba(5,7,13,.9);
+  color:#fff;
+  padding:10px 18px;
+  border-radius:6px;
+  font-size:.78rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  border:1px solid rgba(200,151,43,.7);
+  opacity:0;
+  transition:opacity .2s;
+  text-align:center;
+  line-height:1.6;
+}
+#base-tooltip .tip-label{
+  color:#C8972B;
+  font-size:.7rem;
+  display:block;
+  margin-top:2px;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- CUSTOM CURSOR -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
-
-  <!-- ANIMATED BACKGROUND -->
-  <canvas id="bg-canvas"></canvas>
-
-  <!-- NAV -->
-  <nav id="nav">
-    <div class="nav-logo">Portfolio</div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section id="hero">
-
-    <!-- TEXT BLOCK (top) -->
-    <div class="hero-content">
-      <div class="hero-eyebrow" id="mot-eyebrow" style="opacity:0;">Web Design · Class of 2025</div>
-      <h1 class="hero-name" id="hero-name">
-        <span class="line1" id="mot-line1" style="display:block;opacity:0;">YOUR</span>
-        <span class="line2" id="mot-line2" style="display:block;opacity:0;">NAME</span>
-      </h1>
-      <p class="hero-sub" id="mot-sub" style="opacity:0;max-width:520px;">
-        <strong>Web Designer & Developer</strong> — Marlboro High School Senior. Click a base to explore each chapter of the journey.
-      </p>
-      <div class="hero-ctas" id="mot-ctas" style="opacity:0;">
-        <a href="#projects" class="btn-primary">View My Work</a>
-        <a href="#contact" class="btn-secondary">Let's Connect <span class="arrow">→</span></a>
-      </div>
-    </div>
-
-    <!-- FIELD BLOCK (bottom) -->
-    <div id="hero-field-wrap">
-
-      <!-- Three.js renders here -->
-      <div id="three-container"></div>
-
-      <!-- HTML overlay buttons positioned over each base -->
-
-      <!-- Pitcher's Mound — Younger Me -->
-      <a href="younger.html" class="base-btn" id="btn-mound" style="left:50%;top:42%;">
-        <div class="base-btn-inner">
-          <div class="base-icon mound">⚾<br>YOUNGER<br>ME</div>
-          <div class="base-label">The Beginning</div>
-        </div>
-      </a>
-
-      <!-- 1st Base — Sophomore Year -->
-      <a href="sophomore.html" class="base-btn" id="btn-first" style="left:68%;top:58%;">
-        <div class="base-btn-inner">
-          <div class="base-icon gold">1ST<br>BASE</div>
-          <div class="base-year">Soph. Year</div>
-          <div class="base-label">2022–23</div>
-        </div>
-      </a>
-
-      <!-- 2nd Base — Junior Year -->
-      <a href="junior.html" class="base-btn" id="btn-second" style="left:50%;top:22%;">
-        <div class="base-btn-inner">
-          <div class="base-icon navy">2ND<br>BASE</div>
-          <div class="base-year">Junior Year</div>
-          <div class="base-label">2023–24</div>
-        </div>
-      </a>
-
-      <!-- 3rd Base — Senior Year -->
-      <a href="senior.html" class="base-btn" id="btn-third" style="left:32%;top:58%;">
-        <div class="base-btn-inner">
-          <div class="base-icon gold">3RD<br>BASE</div>
-          <div class="base-year">Senior Year</div>
-          <div class="base-label">2024–25</div>
-        </div>
-      </a>
-
-      <!-- Home Plate — Current / Seton Hall -->
-      <a href="current.html" class="base-btn" id="btn-home" style="left:50%;top:78%;">
-        <div class="base-btn-inner">
-          <div class="base-icon home">🏠<br>HOME</div>
-          <div class="base-year">Seton Hall</div>
-          <div class="base-label">Fall 2025 ✦</div>
-        </div>
-      </a>
-
-    </div><!-- /field-wrap -->
-
-    <div class="hero-scroll-hint" id="mot-scroll" style="position:absolute;bottom:1.5rem;left:4rem;z-index:10;opacity:0;">
-      <div class="scroll-line"></div>
-      Scroll to explore
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track" id="marquee">
-      <span class="marquee-item">HTML5 <span class="marquee-dot"></span></span>
-      <span class="marquee-item">CSS3 <span class="marquee-dot"></span></span>
-      <span class="marquee-item">JavaScript <span class="marquee-dot"></span></span>
-      <span class="marquee-item">UI Design <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Figma <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Responsive Design <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Animations <span class="marquee-dot"></span></span>
-      <span class="marquee-item">User Experience <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Adobe XD <span class="marquee-dot"></span></span>
-      <span class="marquee-item">React <span class="marquee-dot"></span></span>
-      <span class="marquee-item">HTML5 <span class="marquee-dot"></span></span>
-      <span class="marquee-item">CSS3 <span class="marquee-dot"></span></span>
-      <span class="marquee-item">JavaScript <span class="marquee-dot"></span></span>
-      <span class="marquee-item">UI Design <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Figma <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Responsive Design <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Animations <span class="marquee-dot"></span></span>
-      <span class="marquee-item">User Experience <span class="marquee-dot"></span></span>
-      <span class="marquee-item">Adobe XD <span class="marquee-dot"></span></span>
-      <span class="marquee-item">React <span class="marquee-dot"></span></span>
-    </div>
+<div id="hero-field-wrap">
+  <div class="overlay">
+    <h1>SETON <span>HALL</span></h1>
+    <p>3D BASEBALL STADIUM</p>
   </div>
+  <div id="base-tooltip"><span class="tip-name"></span><span class="tip-label">click to open</span></div>
+</div>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="orb" style="width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(200,151,43,0.09),transparent 70%);animation:float 9s ease-in-out infinite;position:absolute;filter:blur(80px);pointer-events:none;z-index:0;"></div>
-    <div class="section-label reveal">About Me</div>
-    <h2 class="section-title reveal">Turning Ideas<br>Into Pixels</h2>
-    <div class="about-grid">
-      <div class="about-text reveal">
-        <p>I'm a <strong>senior at Marlboro High School</strong> with a passion for creating beautiful, functional web experiences. Through the Web Design Pathway, I've developed a deep love for crafting interfaces that look incredible and feel even better to use.</p>
-        <p>From sketching wireframes to writing clean code, I thrive at every step of the design process. I believe great design isn't just about aesthetics — it's about <strong>solving real problems</strong> with elegance and intention.</p>
-        <p>This fall, I'll be continuing my journey at <strong>Seton Hall University</strong>, where I'll push my skills even further. I'm excited to grow as a designer and developer in a field that's constantly evolving.</p>
-      </div>
-      <div class="about-stats reveal reveal-delay-2">
-        <div class="stat-card">
-          <div class="stat-number">4+</div>
-          <div class="stat-label">Years of Design</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">12+</div>
-          <div class="stat-label">Projects Completed</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">Passion Driven</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">∞</div>
-          <div class="stat-label">Ideas in Queue</div>
-        </div>
-      </div>
-    </div>
-  </section>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="section-label reveal">Expertise</div>
-    <h2 class="section-title reveal">My Skill Set</h2>
-    <p class="skills-intro reveal">I've built a well-rounded toolkit across design and development — from writing semantic HTML to crafting pixel-perfect UI layouts.</p>
-    <div class="skills-grid">
-      <div class="skill-card reveal">
-        <div class="skill-icon">🎨</div>
-        <div class="skill-name">HTML5 & Semantics</div>
-        <div class="skill-desc">Clean, accessible markup that forms the rock-solid foundation of every project.</div>
-        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="95"></div></div>
-      </div>
-      <div class="skill-card reveal reveal-delay-1">
-        <div class="skill-icon">✨</div>
-        <div class="skill-name">CSS3 & Animations</div>
-        <div class="skill-desc">Flexbox, Grid, custom properties, keyframes — making things move and look great.</div>
-        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
-      </div>
-      <div class="skill-card reveal reveal-delay-2">
-        <div class="skill-icon">⚡</div>
-        <div class="skill-name">JavaScript</div>
-        <div class="skill-desc">Interactive, dynamic experiences built with modern ES6+ and DOM manipulation.</div>
-        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="82"></div></div>
-      </div>
-      <div class="skill-card reveal reveal-delay-3">
-        <div class="skill-icon">📐</div>
-        <div class="skill-name">UI/UX Design</div>
-        <div class="skill-desc">Wireframing, prototyping, and user flows that put the experience first.</div>
-        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
-      </div>
-      <div class="skill-card reveal reveal-delay-1">
-        <div class="skill-icon">🖥️</div>
-        <div class="skill-name">Figma</div>
-        <div class="skill-desc">Components, auto-layout, and collaborative prototyping at a professional level.</div>
-        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
-      </div>
-      <div class="skill-card reveal reveal-delay-2">
-        <div class="skill-icon">📱</div>
-        <div class="skill-name">Responsive Design</div>
-        <div class="skill-desc">Mobile-first mindset — every layout adapts beautifully across all screen sizes.</div>
-        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="92"></div></div>
-      </div>
-    </div>
-  </section>
+<script>
+(() => {
 
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="orb" style="width:600px;height:600px;bottom:-200px;right:-200px;background:radial-gradient(circle,rgba(200,151,43,0.08),transparent 70%);animation:float 11s ease-in-out infinite reverse;position:absolute;filter:blur(80px);pointer-events:none;z-index:0;"></div>
-    <div class="section-label reveal">Work</div>
-    <h2 class="section-title reveal">Selected Projects</h2>
-    <div class="projects-grid">
-      <div class="project-card reveal">
-        <div class="project-glow" style="background:linear-gradient(135deg,rgba(0,32,91,0.08),transparent);"></div>
-        <div class="project-num">01</div>
-        <div class="project-tag">Web Design</div>
-        <h3 class="project-title">Local Business Redesign</h3>
-        <p class="project-desc">Redesigned the digital presence of a local NJ business — modernized UI, improved conversion flow, and made the site fully responsive.</p>
-        <div class="project-tech">
-          <span class="tech-pill">HTML</span>
-          <span class="tech-pill">CSS</span>
-          <span class="tech-pill">JavaScript</span>
-          <span class="tech-pill">Figma</span>
-        </div>
-        <div class="project-arrow">↗</div>
-      </div>
-      <div class="project-card reveal reveal-delay-1">
-        <div class="project-glow" style="background:linear-gradient(135deg,rgba(200,151,43,0.06),transparent);"></div>
-        <div class="project-num">02</div>
-        <div class="project-tag">App Design</div>
-        <h3 class="project-title">Study Tracker App</h3>
-        <p class="project-desc">A productivity app UI designed and prototyped in Figma, with a fully interactive demo.</p>
-        <div class="project-tech">
-          <span class="tech-pill">Figma</span>
-          <span class="tech-pill">UI/UX</span>
-          <span class="tech-pill">Prototype</span>
-        </div>
-        <div class="project-arrow">↗</div>
-      </div>
-      <div class="project-card reveal reveal-delay-1">
-        <div class="project-glow" style="background:linear-gradient(135deg,rgba(0,32,91,0.08),transparent);"></div>
-        <div class="project-num">03</div>
-        <div class="project-tag">E-Commerce</div>
-        <h3 class="project-title">Online Store Concept</h3>
-        <p class="project-desc">A full e-commerce layout with product pages, cart functionality, and smooth transitions — all built from scratch.</p>
-        <div class="project-tech">
-          <span class="tech-pill">HTML</span>
-          <span class="tech-pill">CSS Grid</span>
-          <span class="tech-pill">JS</span>
-        </div>
-        <div class="project-arrow">↗</div>
-      </div>
-      <div class="project-card reveal reveal-delay-2">
-        <div class="project-glow" style="background:linear-gradient(135deg,rgba(200,151,43,0.06),transparent);"></div>
-        <div class="project-num">04</div>
-        <div class="project-tag">Web Animation</div>
-        <h3 class="project-title">Interactive Landing Page</h3>
-        <p class="project-desc">A high-energy landing page packed with scroll animations, parallax effects, and micro-interactions — pushing the limits of what CSS and JS can do.</p>
-        <div class="project-tech">
-          <span class="tech-pill">CSS Animations</span>
-          <span class="tech-pill">GSAP</span>
-          <span class="tech-pill">JavaScript</span>
-          <span class="tech-pill">Canvas API</span>
-        </div>
-        <div class="project-arrow">↗</div>
-      </div>
-    </div>
-  </section>
+  // =====================================================
+  // SETUP
+  // =====================================================
 
-  <!-- EDUCATION -->
-  <section id="education">
-    <div class="section-label reveal">Education</div>
-    <h2 class="section-title reveal">Where I've<br>Learned & Grown</h2>
-    <div class="edu-grid">
-      <div class="edu-card reveal">
-        <div class="edu-school-badge">
-          <div class="edu-school-icon">🏫</div>
-          <div class="edu-school-name">Marlboro High School</div>
-        </div>
-        <div class="edu-degree">Web Design Pathway</div>
-        <div class="edu-meta">Marlboro, NJ · Class of 2025</div>
-        <p style="color:var(--muted);font-size:0.9rem;line-height:1.8;font-weight:300;margin-bottom:1.5rem;">
-          Completed the full Web Design career pathway — mastering frontend development, UI/UX principles, and design tools used by professionals in the field.
-        </p>
-        <div class="edu-highlight">🎓 Pathway Graduate</div>
-      </div>
-      <div class="edu-card featured reveal reveal-delay-2">
-        <div class="pulse"></div>
-        <div class="edu-school-badge">
-          <div class="edu-school-icon" style="background:rgba(0,85,140,0.2);">🔵</div>
-          <div class="edu-school-name">Seton Hall University</div>
-        </div>
-        <div class="edu-degree">Incoming Freshman</div>
-        <div class="edu-meta">South Orange, NJ · Fall 2025</div>
-        <p style="color:var(--muted);font-size:0.9rem;line-height:1.8;font-weight:300;margin-bottom:1.5rem;">
-          Continuing the journey at Seton Hall — ready to level up in a new environment, explore new disciplines, and bring everything I've learned to the next chapter.
-        </p>
-        <div class="edu-highlight">⚡ Coming This Fall</div>
-      </div>
-    </div>
-  </section>
+  const wrap = document.getElementById('hero-field-wrap');
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="orb" style="width:500px;height:500px;top:0;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(0,32,91,0.3),transparent 70%);animation:float 8s ease-in-out infinite;position:absolute;filter:blur(80px);pointer-events:none;z-index:0;"></div>
-    <div class="contact-inner">
-      <div class="section-label reveal" style="justify-content:center;">Let's Talk</div>
-      <h2 class="section-title reveal" style="text-align:center;">Got a Project<br>in Mind?</h2>
-      <p class="contact-desc reveal">Whether you want to collaborate, hire me, or just say hi — my inbox is always open. Let's create something awesome together.</p>
-      <a href="mailto:yourname@email.com" class="contact-email reveal">yourname@email.com</a>
-      <div class="social-row reveal reveal-delay-2">
-        <a href="#" class="social-link">LinkedIn</a>
-        <a href="#" class="social-link">GitHub</a>
-        <a href="#" class="social-link">Behance</a>
-        <a href="#" class="social-link">Instagram</a>
-      </div>
-    </div>
-  </section>
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x05080f,0.03);
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-copy">© 2025 — All rights reserved</div>
-    <div class="footer-made">Made with <span>♥</span> in Marlboro, NJ</div>
-  </footer>
+  const camera = new THREE.PerspectiveCamera(
+    55,
+    window.innerWidth/window.innerHeight,
+    0.1,
+    300
+  );
 
-  <!-- THREE.JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- MOTION.DEV -->
-  <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
-  <script src="script.js"></script>
-  </script>
+  camera.position.set(0,10,18);
+  camera.lookAt(0,1,-8);
+
+  const renderer = new THREE.WebGLRenderer({
+    antialias:true,
+    alpha:true
+  });
+
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  wrap.appendChild(renderer.domElement);
+
+  window.addEventListener('resize',()=>{
+
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight
+    );
+  });
+
+  // =====================================================
+  // LIGHTING
+  // =====================================================
+
+  scene.add(new THREE.AmbientLight(0xffffff,.4));
+
+  const stadiumLight1 = new THREE.SpotLight(
+    0xfff4d6,
+    2.6,
+    120,
+    Math.PI/5,
+    .4
+  );
+
+  stadiumLight1.position.set(-20,30,10);
+  stadiumLight1.castShadow = true;
+  scene.add(stadiumLight1);
+
+  const stadiumLight2 = new THREE.SpotLight(
+    0xdbeaff,
+    2.2,
+    120,
+    Math.PI/5,
+    .4
+  );
+
+  stadiumLight2.position.set(20,28,10);
+  stadiumLight2.castShadow = true;
+  scene.add(stadiumLight2);
+
+  const goldLight = new THREE.PointLight(
+    0xC8972B,
+    2.5,
+    20
+  );
+
+  goldLight.position.set(0,6,6);
+  scene.add(goldLight);
+
+  // =====================================================
+  // SKY
+  // =====================================================
+
+  const skyGeo = new THREE.CylinderGeometry(
+    50,
+    50,
+    40,
+    64,
+    1,
+    true
+  );
+
+  const skyMat = new THREE.MeshBasicMaterial({
+    color:0x08111f,
+    side:THREE.BackSide
+  });
+
+  const sky = new THREE.Mesh(skyGeo,skyMat);
+  sky.position.y = 12;
+
+  scene.add(sky);
+
+  // =====================================================
+  // STARS
+  // =====================================================
+
+  const starGeo = new THREE.BufferGeometry();
+  const starPos = [];
+
+  for(let i=0;i<1000;i++){
+
+    const radius = 45 + Math.random()*8;
+    const angle = Math.random()*Math.PI*2;
+
+    starPos.push(
+      Math.cos(angle)*radius,
+      8 + Math.random()*24,
+      Math.sin(angle)*radius
+    );
+  }
+
+  starGeo.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute(starPos,3)
+  );
+
+  const stars = new THREE.Points(
+    starGeo,
+    new THREE.PointsMaterial({
+      color:0xffffff,
+      size:.18,
+      transparent:true,
+      opacity:.8
+    })
+  );
+
+  scene.add(stars);
+
+  // =====================================================
+  // FIELD
+  // =====================================================
+
+  const field = new THREE.Mesh(
+    new THREE.PlaneGeometry(70,70),
+    new THREE.MeshLambertMaterial({
+      color:0x1f5f2a
+    })
+  );
+
+  field.rotation.x = -Math.PI/2;
+  field.receiveShadow = true;
+  scene.add(field);
+
+  // mowing stripes — wide bands running left-to-right,
+  // seamlessly tiled from home plate out to deep center field
+
+  const stripeColors = [0x2b7a36, 0x1f5f2a];
+  const bandDepth = 8;
+  const bandStart = 10;   // just in front of home plate
+  const bandCount = 8;    // covers to z = -54 (deep outfield)
+
+  for(let k = 0; k < bandCount; k++){
+    const stripe = new THREE.Mesh(
+      new THREE.PlaneGeometry(70, bandDepth),
+      new THREE.MeshLambertMaterial({
+        color: stripeColors[k % 2]
+      })
+    );
+    stripe.rotation.x = -Math.PI / 2;
+    stripe.position.set(0, 0.01, bandStart - k * bandDepth);
+    scene.add(stripe);
+  }
+
+  // warning track
+
+  const warningTrack = new THREE.Mesh(
+    new THREE.RingGeometry(
+      23,
+      29,
+      64,
+      1,
+      Math.PI,
+      Math.PI
+    ),
+    new THREE.MeshLambertMaterial({
+      color:0x7d4d2a
+    })
+  );
+
+  warningTrack.rotation.x = -Math.PI/2;
+  warningTrack.position.z = -4;
+  warningTrack.position.y = .02;
+
+  scene.add(warningTrack);
+
+  // infield dirt — large circle covering the whole infield area
+  // Diamond center in world: x=0, z=-0.5 (midpoint of all four bases)
+
+  const infield = new THREE.Mesh(
+    new THREE.CircleGeometry(12, 64),
+    new THREE.MeshLambertMaterial({
+      color:0x9a6338
+    })
+  );
+
+  infield.rotation.x = -Math.PI/2;
+  infield.position.set(0, 0.02, -0.5);
+
+  scene.add(infield);
+
+  // inner diamond grass (grass keyhole inside the four bases)
+  // ShapeGeometry is in XY plane; after rotation.x=-PI/2:
+  //   shape (sx, sy) → world (sx, 0, -sy)
+  // Base world positions → shape coords:
+  //   Home  (0,  6)   → (0,   -5.3)  inset
+  //   First (6.5,-0.5)→ (5.8,  0.4)  inset
+  //   2nd   (0,  -7)  → (0,    6.5)  inset
+  //   Third (-6.5,-0.5)→(-5.8,  0.4) inset
+
+  const igShape = new THREE.Shape();
+  // Straight edges with small concave (inward) arcs only at each base corner.
+  // Control points pulled ~1.8 units toward field center (0, 0.7).
+
+  igShape.moveTo( 0.856, -4.459);          // just past home, heading to 1st
+  igShape.lineTo( 4.944, -0.441);          // approach 1st base corner
+  igShape.quadraticCurveTo( 4.0,  0.50,  4.973,  1.269);  // inward notch at 1st
+  igShape.lineTo( 0.827,  5.631);          // approach 2nd base corner
+  igShape.quadraticCurveTo( 0.0,  4.70, -0.827,  5.631);  // inward notch at 2nd
+  igShape.lineTo(-4.973,  1.269);          // approach 3rd base corner
+  igShape.quadraticCurveTo(-4.0,  0.50, -4.944, -0.441);  // inward notch at 3rd
+  igShape.lineTo(-0.856, -4.459);          // approach home corner
+  igShape.quadraticCurveTo( 0.0, -3.50,  0.856, -4.459);  // inward notch at home
+  igShape.closePath();
+
+  const innerGrass = new THREE.Mesh(
+    new THREE.ShapeGeometry(igShape),
+    new THREE.MeshLambertMaterial({
+      color:0x1f5f2a
+    })
+  );
+
+  innerGrass.rotation.x = -Math.PI/2;
+  innerGrass.position.y = 0.045;
+
+  scene.add(innerGrass);
+
+  // home plate area dirt circle
+
+  const homeDirt = new THREE.Mesh(
+    new THREE.CircleGeometry(3.8,32),
+    new THREE.MeshLambertMaterial({
+      color:0x9a6338
+    })
+  );
+
+  homeDirt.rotation.x = -Math.PI/2;
+  homeDirt.position.set(0,.031,6);
+
+  scene.add(homeDirt);
+
+  // mound
+
+  const mound = new THREE.Mesh(
+    new THREE.CylinderGeometry(
+      1.5,
+      1.9,
+      .35,
+      32
+    ),
+    new THREE.MeshLambertMaterial({
+      color:0xb07a48
+    })
+  );
+
+  mound.position.set(0,.16,0);
+  mound.castShadow = true;
+  mound.userData = { label: 'Post High School', url: 'post-hs.html' };
+
+  scene.add(mound);
+
+  // pitcher's rubber
+
+  const rubber = new THREE.Mesh(
+    new THREE.BoxGeometry(.55,.06,.18),
+    new THREE.MeshLambertMaterial({
+      color:0xfafafa,
+      emissive:0xffffff,
+      emissiveIntensity:.25
+    })
+  );
+
+  rubber.position.set(0,.335,0);
+  rubber.castShadow = true;
+
+  scene.add(rubber);
+
+  // =====================================================
+  // BASES
+  // =====================================================
+
+  const H_=[0,6];
+  const F_=[6.5,-0.5];
+  const S_=[0,-7];
+  const T_=[-6.5,-0.5];
+
+  // dirt baselines
+
+  [[H_,F_],[F_,S_],[S_,T_],[T_,H_]].forEach(([a,b])=>{
+
+    const dx=b[0]-a[0];
+    const dz=b[1]-a[1];
+
+    const len=Math.sqrt(dx*dx+dz*dz);
+
+    const strip=new THREE.Mesh(
+      new THREE.PlaneGeometry(.9,len),
+      new THREE.MeshLambertMaterial({
+        color:0x9a6338
+      })
+    );
+
+    strip.rotation.x=-Math.PI/2;
+    strip.rotation.z=-Math.atan2(dx,dz);
+
+    strip.position.set(
+      (a[0]+b[0])/2,
+      .04,
+      (a[1]+b[1])/2
+    );
+
+    scene.add(strip);
+  });
+
+  // foul lines
+
+  // Foul lines: from home plate outward through 1st/3rd toward outfield corners
+  // Direction home→first = [6.5,-6.5], extended ~22 units = [16,-10]
+  [[H_,[16,-10]],[H_,[-16,-10]]].forEach(([a,b])=>{
+
+    const dx=b[0]-a[0];
+    const dz=b[1]-a[1];
+
+    const len=Math.sqrt(dx*dx+dz*dz);
+
+    const line=new THREE.Mesh(
+      new THREE.PlaneGeometry(.15,len),
+      new THREE.MeshBasicMaterial({
+        color:0xffffff,
+        transparent:true,
+        opacity:.95
+      })
+    );
+
+    line.rotation.x=-Math.PI/2;
+    line.rotation.z=-Math.atan2(dx,dz);
+
+    line.position.set(
+      (a[0]+b[0])/2,
+      .05,
+      (a[1]+b[1])/2
+    );
+
+    scene.add(line);
+  });
+
+  // home plate
+
+  const homeShape = new THREE.Shape();
+
+  homeShape.moveTo(-.45,-.55);
+  homeShape.lineTo(.45,-.55);
+  homeShape.lineTo(.45,.1);
+  homeShape.lineTo(0,.55);
+  homeShape.lineTo(-.45,.1);
+  homeShape.closePath();
+
+  const homePlate = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(
+      homeShape,
+      {
+        depth:.08,
+        bevelEnabled:false
+      }
+    ),
+    new THREE.MeshLambertMaterial({
+      color:0xffffff,
+      emissive:0xffffff,
+      emissiveIntensity:.4
+    })
+  );
+
+  homePlate.rotation.x = -Math.PI/2;
+  homePlate.position.set(H_[0],.08,H_[1]);
+  homePlate.userData = { label: 'Before High School', url: 'before-hs.html' };
+
+  scene.add(homePlate);
+
+  // 1st base – Sophomore Year
+
+  const firstBase = new THREE.Mesh(
+    new THREE.BoxGeometry(1,.14,1),
+    new THREE.MeshLambertMaterial({
+      color:0xC8972B,
+      emissive:0xC8972B,
+      emissiveIntensity:.3
+    })
+  );
+  firstBase.position.set(F_[0],.08,F_[1]);
+  firstBase.castShadow = true;
+  firstBase.userData = { label: 'Sophomore Year', url: 'sophomore.html' };
+  scene.add(firstBase);
+
+  // 2nd base – Junior Year
+
+  const secondBase = new THREE.Mesh(
+    new THREE.BoxGeometry(1,.14,1),
+    new THREE.MeshLambertMaterial({
+      color:0x00205B,
+      emissive:0x0030aa,
+      emissiveIntensity:.3
+    })
+  );
+  secondBase.position.set(S_[0],.08,S_[1]);
+  secondBase.rotation.y = Math.PI / 4;
+  secondBase.castShadow = true;
+  secondBase.userData = { label: 'Junior Year', url: 'junior.html' };
+  scene.add(secondBase);
+
+  // 3rd base – Senior Year
+
+  const thirdBase = new THREE.Mesh(
+    new THREE.BoxGeometry(1,.14,1),
+    new THREE.MeshLambertMaterial({
+      color:0xC8972B,
+      emissive:0xC8972B,
+      emissiveIntensity:.3
+    })
+  );
+  thirdBase.position.set(T_[0],.08,T_[1]);
+  thirdBase.castShadow = true;
+  thirdBase.userData = { label: 'Senior Year', url: 'senior.html' };
+  scene.add(thirdBase);
+
+  const clickMeshes = [homePlate, firstBase, secondBase, thirdBase, mound];
+
+  // glow rings
+
+  const glowRings=[];
+
+  [H_,F_,S_,T_].forEach(pos=>{
+
+    const glow = new THREE.Mesh(
+      new THREE.RingGeometry(.9,1.5,32),
+      new THREE.MeshBasicMaterial({
+        color:0xffffff,
+        transparent:true,
+        opacity:.22,
+        side:THREE.DoubleSide
+      })
+    );
+
+    glow.rotation.x = -Math.PI/2;
+    glow.position.set(pos[0],.03,pos[1]);
+
+    scene.add(glow);
+    glowRings.push(glow);
+  });
+
+  // =====================================================
+  // OUTFIELD WALL
+  // =====================================================
+
+  for(let i=0;i<=32;i++){
+
+    const angle=(i/32)*Math.PI;
+
+    const r=22;
+
+    const x=Math.cos(angle-Math.PI/2)*r;
+    const z=Math.sin(angle-Math.PI/2)*r-4;
+
+    const wall = new THREE.Mesh(
+      new THREE.BoxGeometry(1.6,2.6,.35),
+      new THREE.MeshLambertMaterial({
+        color:i%2===0 ? 0x00205B : 0xC8972B,
+        emissive:i%2===0 ? 0x001030 : 0x5f3400,
+        emissiveIntensity:.45
+      })
+    );
+
+    wall.position.set(x,1.3,z);
+    wall.rotation.y = angle;
+
+    scene.add(wall);
+  }
+
+  // =====================================================
+  // SCOREBOARD
+  // =====================================================
+
+  const board = new THREE.Mesh(
+    new THREE.BoxGeometry(9,4.5,.5),
+    new THREE.MeshLambertMaterial({
+      color:0x0d1425,
+      emissive:0x050c1a,
+      emissiveIntensity:.4
+    })
+  );
+
+  board.position.set(0,7,-24);
+
+  scene.add(board);
+
+  const screen = new THREE.Mesh(
+    new THREE.PlaneGeometry(7.5,3.4),
+    new THREE.MeshBasicMaterial({
+      color:0x1f4c92
+    })
+  );
+
+  screen.position.set(0,7,-23.7);
+
+  scene.add(screen);
+
+  // =====================================================
+  // LIGHT TOWERS
+  // =====================================================
+
+  function makeLightTower(x,z){
+
+    const pole = new THREE.Mesh(
+      new THREE.CylinderGeometry(.22,.3,26,10),
+      new THREE.MeshLambertMaterial({
+        color:0x888888
+      })
+    );
+
+    pole.position.set(x,13,z);
+
+    scene.add(pole);
+
+    const arm = new THREE.Mesh(
+      new THREE.BoxGeometry(6,.35,.35),
+      new THREE.MeshLambertMaterial({
+        color:0x999999
+      })
+    );
+
+    arm.position.set(x,25,z);
+
+    scene.add(arm);
+
+    for(let row=0;row<3;row++){
+
+      for(let col=0;col<3;col++){
+
+        const lamp = new THREE.Mesh(
+          new THREE.BoxGeometry(.8,.6,.5),
+          new THREE.MeshLambertMaterial({
+            color:0xfff4d1,
+            emissive:0xfff4d1,
+            emissiveIntensity:1.2
+          })
+        );
+
+        lamp.position.set(
+          x+(col-1)*1.1,
+          26+row*.7,
+          z+.3
+        );
+
+        scene.add(lamp);
+      }
+    }
+  }
+
+  makeLightTower(-24,4);
+  makeLightTower(24,4);
+
+  // =====================================================
+  // CROWD
+  // =====================================================
+
+  for(let i=0;i<800;i++){
+
+    const angle=Math.random()*Math.PI;
+    const r=24+Math.random()*5;
+
+    const crowd = new THREE.Mesh(
+      new THREE.SphereGeometry(
+        .12+Math.random()*.08,
+        5,
+        5
+      ),
+      new THREE.MeshLambertMaterial({
+        color:[
+          0xC8972B,
+          0x00205B,
+          0xffffff,
+          0x4d8fff
+        ][Math.floor(Math.random()*4)],
+
+        emissive:[
+          0xC8972B,
+          0x00205B,
+          0xffffff,
+          0x4d8fff
+        ][Math.floor(Math.random()*4)],
+
+        emissiveIntensity:.5
+      })
+    );
+
+    crowd.position.set(
+      Math.cos(angle-Math.PI/2)*r,
+      1+Math.random()*4,
+      Math.sin(angle-Math.PI/2)*r-4
+    );
+
+    scene.add(crowd);
+  }
+
+  // =====================================================
+  // SKYLINE
+  // =====================================================
+
+  const buildings=[
+    [-30,8,3,-42],
+    [-24,13,4,-44],
+    [-18,7,3,-43],
+    [-10,14,5,-46],
+    [0,18,6,-48],
+    [10,14,5,-46],
+    [18,7,3,-43],
+    [24,13,4,-44],
+    [30,8,3,-42]
+  ];
+
+  buildings.forEach(([x,h,w,z])=>{
+
+    const b = new THREE.Mesh(
+      new THREE.BoxGeometry(w,h,3),
+      new THREE.MeshLambertMaterial({
+        color:0x0d1830,
+        emissive:0x0d1830,
+        emissiveIntensity:.4
+      })
+    );
+
+    b.position.set(x,h/2,z);
+
+    scene.add(b);
+  });
+
+  // =====================================================
+  // ANIMATED BALL
+  // =====================================================
+
+  const ball = new THREE.Mesh(
+    new THREE.SphereGeometry(.28,16,16),
+    new THREE.MeshLambertMaterial({
+      color:0xfffef0,
+      emissive:0xffffff,
+      emissiveIntensity:.35
+    })
+  );
+
+  scene.add(ball);
+
+  const ballLight = new THREE.PointLight(
+    0xffffff,
+    1.5,
+    5
+  );
+
+  scene.add(ballLight);
+
+  const path=[H_,F_,S_,T_,H_];
+
+  let ballT=0;
+  let ballSeg=0;
+
+  function getBallPos(seg,t){
+
+    const a=path[seg];
+    const b=path[(seg+1)%path.length];
+
+    return new THREE.Vector3(
+      a[0]+(b[0]-a[0])*t,
+      .3+Math.sin(t*Math.PI)*2.5,
+      a[1]+(b[1]-a[1])*t
+    );
+  }
+
+  // =====================================================
+  // PARALLAX
+  // =====================================================
+
+  let targetRX=0;
+  let targetRY=0;
+
+  let currentRX=0;
+  let currentRY=0;
+
+  // Raycaster for base hover + click
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  const tooltip = document.getElementById('base-tooltip');
+  const tipName = tooltip.querySelector('.tip-name');
+
+  wrap.addEventListener('mousemove',(e)=>{
+
+    const rect = wrap.getBoundingClientRect();
+
+    targetRY=((e.clientX-rect.left)/rect.width-.5)*.4;
+    targetRX=-((e.clientY-rect.top)/rect.height-.5)*.16;
+
+    mouse.x = ((e.clientX-rect.left)/rect.width)*2 - 1;
+    mouse.y = -((e.clientY-rect.top)/rect.height)*2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(clickMeshes);
+    if(hits.length){
+      tipName.textContent = hits[0].object.userData.label;
+      tooltip.style.opacity = '1';
+      tooltip.style.left = (e.clientX - rect.left + 18) + 'px';
+      tooltip.style.top  = (e.clientY - rect.top  - 14) + 'px';
+      wrap.style.cursor = 'pointer';
+    } else {
+      tooltip.style.opacity = '0';
+      wrap.style.cursor = 'default';
+    }
+  });
+
+  wrap.addEventListener('click',(e)=>{
+    const rect = wrap.getBoundingClientRect();
+    mouse.x = ((e.clientX-rect.left)/rect.width)*2 - 1;
+    mouse.y = -((e.clientY-rect.top)/rect.height)*2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(clickMeshes);
+    if(hits.length){
+      const url = hits[0].object.userData.url;
+      if(url) window.location.href = url;
+    }
+  });
+
+  // =====================================================
+  // LOOP
+  // =====================================================
+
+  const clock = new THREE.Clock();
+
+  function tick(){
+
+    const delta = clock.getDelta();
+    const elapsed = clock.getElapsedTime();
+
+    currentRX += (targetRX-currentRX)*.04;
+    currentRY += (targetRY-currentRY)*.04;
+
+    camera.position.x = currentRY*8;
+    camera.position.y = 10 + currentRX*6;
+
+    camera.lookAt(
+      currentRY*2,
+      1,
+      -8
+    );
+
+    // ball movement
+
+    ballT += delta*.28;
+
+    if(ballT>=1){
+      ballT=0;
+      ballSeg=(ballSeg+1)%(path.length-1);
+    }
+
+    const bp = getBallPos(ballSeg,ballT);
+
+    ball.position.copy(bp);
+    ballLight.position.copy(bp);
+
+    ball.rotation.x += delta*8;
+    ball.rotation.z += delta*5;
+
+    // glow pulse
+
+    glowRings.forEach((g,i)=>{
+
+      const p=.5+.5*Math.sin(elapsed*2.2+i*1.5);
+
+      g.material.opacity=p*.4;
+      g.scale.setScalar(.9+p*.25);
+    });
+
+    goldLight.intensity =
+      2.3 + Math.sin(elapsed*3)*.4;
+
+    renderer.render(scene,camera);
+
+    requestAnimationFrame(tick);
+  }
+
+  tick();
+
+})();
+</script>
+
 </body>
 </html>

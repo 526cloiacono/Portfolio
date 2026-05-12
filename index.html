@@ -16,7 +16,7 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#05070d;
+  background:#0d1a2e;
   font-family:Arial,Helvetica,sans-serif;
 }
 
@@ -106,7 +106,7 @@ canvas{
   const wrap = document.getElementById('hero-field-wrap');
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x05080f,0.03);
+  scene.fog = new THREE.FogExp2(0x0d1a2e,0.03);
 
   const camera = new THREE.PerspectiveCamera(
     55,
@@ -200,7 +200,7 @@ canvas{
   );
 
   const skyMat = new THREE.MeshBasicMaterial({
-    color:0x08111f,
+    color:0x142338,
     side:THREE.BackSide
   });
 
@@ -442,9 +442,8 @@ canvas{
 
   // foul lines
 
-  // Foul lines: from home plate outward through 1st/3rd toward outfield corners
-  // Direction home→first = [6.5,-6.5], extended ~22 units = [16,-10]
-  [[H_,[16,-10]],[H_,[-16,-10]]].forEach(([a,b])=>{
+  // Foul lines: originate at home plate, pass through 1st/3rd base corners, extend to outfield
+  [[[2.6,4.7],[16,-10]],[[-2.6,4.7],[-16,-10]]].forEach(([a,b])=>{
 
     const dx=b[0]-a[0];
     const dz=b[1]-a[1];
@@ -461,7 +460,7 @@ canvas{
     );
 
     line.rotation.x=-Math.PI/2;
-    line.rotation.z=-Math.atan2(dx,dz);
+    line.rotation.z=Math.atan2(-dx,-dz);
 
     line.position.set(
       (a[0]+b[0])/2,
@@ -476,11 +475,11 @@ canvas{
 
   const homeShape = new THREE.Shape();
 
-  homeShape.moveTo(-.45,-.55);
-  homeShape.lineTo(.45,-.55);
-  homeShape.lineTo(.45,.1);
-  homeShape.lineTo(0,.55);
-  homeShape.lineTo(-.45,.1);
+  homeShape.moveTo(-.45,.55);
+  homeShape.lineTo(.45,.55);
+  homeShape.lineTo(.45,-.1);
+  homeShape.lineTo(0,-.55);
+  homeShape.lineTo(-.45,-.1);
   homeShape.closePath();
 
   const homePlate = new THREE.Mesh(
@@ -504,7 +503,39 @@ canvas{
 
   scene.add(homePlate);
 
-  // 1st base – Sophomore Year
+  // batter's boxes — white outlines left and right of home plate
+  // real dimensions: ~4 ft wide, 6 ft long; scaled to match scene units
+  const batterBoxMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.9
+  });
+  const lineW = 0.08; // line thickness
+  const bW = 1.0;     // box half-width
+  const bH = 1.3;     // box half-height
+
+  [1, -1].forEach(side => {
+    const cx = side * (bW + 0.6); // offset left/right from plate
+    const cz = H_[1];
+
+    // top, bottom, left, right edges
+    [
+      [bW*2+lineW, lineW,  0,        -bH],   // bottom
+      [bW*2+lineW, lineW,  0,         bH],   // top
+      [lineW,      bH*2,  -bW,        0],    // left
+      [lineW,      bH*2,   bW,        0],    // right
+    ].forEach(([w, h, ox, oz]) => {
+      const seg = new THREE.Mesh(
+        new THREE.PlaneGeometry(w, h),
+        batterBoxMat
+      );
+      seg.rotation.x = -Math.PI / 2;
+      seg.position.set(cx + ox, 0.06, cz + oz);
+      scene.add(seg);
+    });
+  });
+
+
 
   const firstBase = new THREE.Mesh(
     new THREE.BoxGeometry(1,.14,1),
@@ -515,6 +546,7 @@ canvas{
     })
   );
   firstBase.position.set(F_[0],.08,F_[1]);
+  firstBase.rotation.y = Math.PI / 4;
   firstBase.castShadow = true;
   firstBase.userData = { label: 'Sophomore Year', url: 'sophomore.html' };
   scene.add(firstBase);
@@ -546,6 +578,7 @@ canvas{
     })
   );
   thirdBase.position.set(T_[0],.08,T_[1]);
+  thirdBase.rotation.y = Math.PI / 4;
   thirdBase.castShadow = true;
   thirdBase.userData = { label: 'Senior Year', url: 'senior.html' };
   scene.add(thirdBase);

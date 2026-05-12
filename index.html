@@ -62,6 +62,92 @@ canvas{
   font-size:1rem;
 }
 
+/* Base arrival modal */
+#base-modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  background:rgba(0,0,0,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s;
+}
+#base-modal-overlay.visible{
+  opacity:1;
+  pointer-events:all;
+}
+#base-modal{
+  background:linear-gradient(160deg,#00205B 0%,#0a1535 100%);
+  border:2px solid #C8972B;
+  border-radius:12px;
+  padding:36px 44px;
+  text-align:center;
+  max-width:380px;
+  width:90%;
+  box-shadow:0 0 60px rgba(200,151,43,.35);
+  transform:translateY(24px);
+  transition:transform .35s;
+}
+#base-modal-overlay.visible #base-modal{
+  transform:translateY(0);
+}
+#base-modal .modal-base-label{
+  color:#C8972B;
+  font-size:.75rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+#base-modal h2{
+  color:#fff;
+  font-size:1.75rem;
+  letter-spacing:.06em;
+  margin-bottom:10px;
+}
+#base-modal p{
+  color:#b0bdd8;
+  font-size:.9rem;
+  letter-spacing:.1em;
+  margin-bottom:28px;
+}
+#base-modal-advance{
+  display:inline-block;
+  background:#C8972B;
+  color:#00205B;
+  font-weight:700;
+  font-size:.85rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:12px 30px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background .2s,transform .1s;
+}
+#base-modal-advance:hover{
+  background:#e0ab35;
+  transform:scale(1.04);
+}
+#base-modal-view{
+  display:block;
+  margin-top:14px;
+  color:#C8972B;
+  font-size:.8rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  text-decoration:underline;
+  opacity:.8;
+  transition:opacity .2s, letter-spacing .2s, color .2s;
+}
+#base-modal-view:hover{
+  opacity:1;
+  color:#e0ab35;
+  letter-spacing:.22em;
+}
+
 #base-tooltip{
   position:absolute;
   pointer-events:none;
@@ -89,6 +175,16 @@ canvas{
 </head>
 
 <body>
+
+<div id="base-modal-overlay">
+  <div id="base-modal">
+    <div class="modal-base-label" id="modal-base-label">First Base</div>
+    <h2 id="modal-title">Sophomore Year</h2>
+    <p id="modal-desc">Ready to advance to the next base?</p>
+    <button id="base-modal-advance">Advance to Next Base</button>
+    <a id="base-modal-view" href="#" target="_blank">View Portfolio Page</a>
+  </div>
+</div>
 
 <div id="hero-field-wrap">
   <div id="base-tooltip"><span class="tip-name"></span><span class="tip-label">click to open</span></div>
@@ -909,8 +1005,45 @@ canvas{
 
   const path=[H_,F_,S_,T_,H_];
 
+  // Data shown in the modal when the player arrives at each base
+  const stopData = [
+    { baseLabel: 'First Base',  title: 'Sophomore Year',     desc: 'You\'ve reached first! Ready to advance to second base?', url: 'sophomore.html' },
+    { baseLabel: 'Second Base', title: 'Junior Year',        desc: 'Halfway home! Ready to advance to third base?',           url: 'junior.html'    },
+    { baseLabel: 'Third Base',  title: 'Senior Year',        desc: 'So close! Ready to round third and head home?',           url: 'senior.html'    },
+    { baseLabel: 'Home Plate',  title: 'Before High School', desc: 'You\'ve scored! Ready to run the bases again?',           url: 'before-hs.html' },
+  ];
+
   let ballT=0;
   let ballSeg=0;
+  let paused=false;
+
+  const modalOverlay  = document.getElementById('base-modal-overlay');
+  const modalLabel    = document.getElementById('modal-base-label');
+  const modalTitle    = document.getElementById('modal-title');
+  const modalDesc     = document.getElementById('modal-desc');
+  const modalAdvance  = document.getElementById('base-modal-advance');
+  const modalView     = document.getElementById('base-modal-view');
+
+  function showBaseModal(seg){
+    const d = stopData[seg];
+    modalLabel.textContent = d.baseLabel;
+    modalTitle.textContent = d.title;
+    modalDesc.textContent  = d.desc;
+    modalAdvance.textContent = seg === stopData.length - 1 ? 'Run Again' : 'Advance to Next Base';
+    modalView.href = d.url;
+    modalOverlay.classList.add('visible');
+  }
+
+  function hideBaseModal(){
+    modalOverlay.classList.remove('visible');
+  }
+
+  modalAdvance.addEventListener('click', () => {
+    hideBaseModal();
+    ballT = 0;
+    ballSeg = (ballSeg + 1) % (path.length - 1);
+    paused = false;
+  });
 
   function getBallPos(seg,t){
 
@@ -1000,11 +1133,14 @@ canvas{
 
     // ball movement
 
-    ballT += delta*.28;
+    if(!paused){
+      ballT += delta*.28;
 
-    if(ballT>=1){
-      ballT=0;
-      ballSeg=(ballSeg+1)%(path.length-1);
+      if(ballT>=1){
+        ballT=1;
+        paused=true;
+        showBaseModal(ballSeg);
+      }
     }
 
     const bp = getBallPos(ballSeg,ballT);

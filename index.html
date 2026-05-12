@@ -154,7 +154,7 @@ canvas{
 #swing-panel{
   position:fixed;
   right:28px;
-  bottom:40px;
+  bottom:420px;
   transform:translateX(120%);
   z-index:60;
   background:linear-gradient(160deg,#00205B 0%,#0a1535 100%);
@@ -455,10 +455,10 @@ canvas{
   // LIGHTING
   // =====================================================
 
-  scene.add(new THREE.AmbientLight(0xffffff, 5.5));
+  scene.add(new THREE.AmbientLight(0xffffff, 1.8));
 
   // Bright midday sun
-  const sunLight = new THREE.DirectionalLight(0xfff8e7, 6.0);
+  const sunLight = new THREE.DirectionalLight(0xfff8e7, 2.5);
   sunLight.position.set(8, 40, 10);
   sunLight.castShadow = true;
   scene.add(sunLight);
@@ -488,27 +488,47 @@ canvas{
   scene.add(stadiumLight2);
 
   // Extra fill light from center field
-  const fillLight = new THREE.DirectionalLight(0xfff8f0, 3.5);
+  const fillLight = new THREE.DirectionalLight(0xfff8f0, 1.2);
   fillLight.position.set(0, 20, -15);
   scene.add(fillLight);
 
   // Outfield brightening light
-  const outfieldLight = new THREE.DirectionalLight(0xd0e8ff, 6.5);
+  const outfieldLight = new THREE.DirectionalLight(0xd0e8ff, 3.5);
   outfieldLight.position.set(0, 30, -40);
   outfieldLight.target.position.set(0, 0, -15);
   scene.add(outfieldLight);
   scene.add(outfieldLight.target);
 
   // Dead center spotlight — floods center field and back of stands
-  const centerLight1 = new THREE.SpotLight(0xffffff, 18.0, 120, Math.PI / 3.5, 0.5);
+  const centerLight1 = new THREE.SpotLight(0xffffff, 8.0, 180, Math.PI / 3.5, 0.5);
   centerLight1.position.set(0, 45, -5);
   centerLight1.target.position.set(0, 0, -25);
   scene.add(centerLight1);
   scene.add(centerLight1.target);
 
-  const centerLight2 = new THREE.PointLight(0xfff5e0, 10.0, 80);
+  const centerLight2 = new THREE.PointLight(0xfff5e0, 5.0, 120);
   centerLight2.position.set(0, 20, -30);
   scene.add(centerLight2);
+
+  // Outside-stadium sun guns aimed at center field from behind and above the bowl
+  const extLight1 = new THREE.SpotLight(0xfff8e0, 10.0, 600, Math.PI / 5, 0.4);
+  extLight1.position.set(0, 400, -90);
+  extLight1.target.position.set(0, 5, -20);
+  scene.add(extLight1);
+  scene.add(extLight1.target);
+
+  // Flanking lights from left and right outside the stadium
+  const extLight2 = new THREE.SpotLight(0xffffff, 8.0, 550, Math.PI / 5, 0.5);
+  extLight2.position.set(-80, 350, -50);
+  extLight2.target.position.set(0, 5, -20);
+  scene.add(extLight2);
+  scene.add(extLight2.target);
+
+  const extLight3 = new THREE.SpotLight(0xffffff, 8.0, 550, Math.PI / 5, 0.5);
+  extLight3.position.set(80, 350, -50);
+  extLight3.target.position.set(0, 5, -20);
+  scene.add(extLight3);
+  scene.add(extLight3.target);
 
   const goldLight = new THREE.PointLight(
     0xC8972B,
@@ -518,6 +538,31 @@ canvas{
 
   goldLight.position.set(0,6,6);
   scene.add(goldLight);
+
+  // Home plate bright spotlight from above
+  const homePlateSpot = new THREE.SpotLight(0xffffff, 8.0, 80, Math.PI / 6, 0.3);
+  homePlateSpot.position.set(0, 30, 14);
+  homePlateSpot.target.position.set(0, 0, 9);
+  scene.add(homePlateSpot);
+  scene.add(homePlateSpot.target);
+
+  // Point light right at plate level for extra fill
+  const homePlateFill = new THREE.PointLight(0xfff8e0, 4.0, 40);
+  homePlateFill.position.set(0, 8, 9);
+  scene.add(homePlateFill);
+
+  // Center field bleacher lights — two spots aimed directly at middle of the bowl
+  const bleacherSpot1 = new THREE.SpotLight(0xfff8e0, 18.0, 120, Math.PI / 5, 0.6);
+  bleacherSpot1.position.set(0, 50, 10);
+  bleacherSpot1.target.position.set(0, 12, -42);
+  scene.add(bleacherSpot1);
+  scene.add(bleacherSpot1.target);
+
+  const bleacherSpot2 = new THREE.SpotLight(0xffffff, 14.0, 100, Math.PI / 5, 0.6);
+  bleacherSpot2.position.set(0, 35, -10);
+  bleacherSpot2.target.position.set(0, 14, -42);
+  scene.add(bleacherSpot2);
+  scene.add(bleacherSpot2.target);
 
   // =====================================================
   // SKY
@@ -740,9 +785,9 @@ canvas{
   // =====================================================
 
   const H_=[0,9];
-  const F_=[9.75,-0.75];
+  const F_=[10.1,-0.4];
   const S_=[0,-10.5];
-  const T_=[-9.75,-0.75];
+  const T_=[-10.1,-0.4];
 
   // dirt baselines removed — dirt diamond covers the baseline area
 
@@ -840,6 +885,31 @@ canvas{
       scene.add(seg);
     });
   });
+
+  // Logos on dirt — Marlboro (left) and Seton Hall (right)
+  const logoLoader = new THREE.TextureLoader();
+
+  const marlboroTex = logoLoader.load('marlboro.png.png');
+  const marlboroPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.5, 2.2),
+    new THREE.MeshBasicMaterial({ map: marlboroTex, transparent: true, depthWrite: false })
+  );
+  marlboroPlane.rotation.order = 'YXZ';
+  marlboroPlane.rotation.y = Math.PI * 1.75;
+  marlboroPlane.rotation.x = -Math.PI / 2;
+  marlboroPlane.position.set(-(bW + 0.9) - bW - 6.8, 0.04, H_[1] - 5.0);
+  scene.add(marlboroPlane);
+
+  const setonHallTex = logoLoader.load('seton-hall.png.png');
+  const setonHallPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(5.5, 3.5),
+    new THREE.MeshBasicMaterial({ map: setonHallTex, transparent: true, depthWrite: false })
+  );
+  setonHallPlane.rotation.order = 'YXZ';
+  setonHallPlane.rotation.y = -Math.PI * 1.75;
+  setonHallPlane.rotation.x = -Math.PI / 2;
+  setonHallPlane.position.set((bW + 0.9) + bW + 6.8, 0.04, H_[1] - 5.0);
+  scene.add(setonHallPlane);
 
 
 

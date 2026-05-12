@@ -154,14 +154,14 @@ canvas{
 #swing-panel{
   position:fixed;
   right:28px;
-  top:50%;
-  transform:translateY(-50%) translateX(120%);
+  bottom:40px;
+  transform:translateX(120%);
   z-index:60;
   background:linear-gradient(160deg,#00205B 0%,#0a1535 100%);
   border:2px solid #C8972B;
   border-radius:12px;
-  padding:22px 26px;
-  width:240px;
+  padding:26px 30px;
+  width:290px;
   text-align:center;
   box-shadow:0 0 50px rgba(200,151,43,.4);
   transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .4s;
@@ -169,28 +169,28 @@ canvas{
   pointer-events:none;
 }
 #swing-panel.visible{
-  transform:translateY(-50%) translateX(0);
+  transform:translateX(0);
   opacity:1;
   pointer-events:all;
 }
 #swing-panel .sp-label{
   color:#C8972B;
-  font-size:.65rem;
+  font-size:.85rem;
   letter-spacing:.25em;
   text-transform:uppercase;
-  margin-bottom:12px;
+  margin-bottom:16px;
 }
 #swing-trigger-btn{
   display:inline-block;
   background:#C8972B;
   color:#00205B;
   font-weight:700;
-  font-size:.9rem;
+  font-size:1.05rem;
   letter-spacing:.18em;
   text-transform:uppercase;
-  padding:13px 28px;
+  padding:15px 28px;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   cursor:pointer;
   width:100%;
   transition:background .2s,transform .1s;
@@ -252,6 +252,34 @@ canvas{
   transition:background .2s;
 }
 #swing-stop-btn:hover{ background:#e0ab35; }
+
+/* Run button in swing panel */
+.sp-or{
+  color:#5a6e90;
+  font-size:.65rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  margin:10px 0 8px;
+}
+#run-trigger-btn{
+  display:inline-block;
+  background:transparent;
+  color:#C8972B;
+  font-weight:700;
+  font-size:1.05rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:14px 28px;
+  border:2px solid #C8972B;
+  border-radius:8px;
+  cursor:pointer;
+  width:100%;
+  transition:background .2s,color .2s,transform .1s;
+}
+#run-trigger-btn:hover{
+  background:rgba(200,151,43,.15);
+  transform:scale(1.03);
+}
 
 /* Base action buttons (run next / go home) */
 #base-actions{
@@ -350,6 +378,8 @@ canvas{
 <div id="swing-panel">
   <div class="sp-label">⚾ Batter Up!</div>
   <button id="swing-trigger-btn">SWING</button>
+  <div class="sp-or">— or —</div>
+  <button id="run-trigger-btn">RUN</button>
   <div id="swing-meter-wrap">
     <div id="swing-meter-track">
       <div class="sm-zone sm-foul"></div>
@@ -394,7 +424,7 @@ canvas{
     300
   );
 
-  camera.position.set(0,10,18);
+  camera.position.set(0,12,24);
   camera.lookAt(0,1,-8);
 
   const renderer = new THREE.WebGLRenderer({
@@ -425,12 +455,18 @@ canvas{
   // LIGHTING
   // =====================================================
 
-  scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+  scene.add(new THREE.AmbientLight(0xffffff, 5.5));
+
+  // Bright midday sun
+  const sunLight = new THREE.DirectionalLight(0xfff8e7, 6.0);
+  sunLight.position.set(8, 40, 10);
+  sunLight.castShadow = true;
+  scene.add(sunLight);
 
   const stadiumLight1 = new THREE.SpotLight(
     0xfff4d6,
-    6.0,
-    180,
+    12.0,
+    220,
     Math.PI/4,
     .4
   );
@@ -441,8 +477,8 @@ canvas{
 
   const stadiumLight2 = new THREE.SpotLight(
     0xdbeaff,
-    5.5,
-    180,
+    11.0,
+    220,
     Math.PI/4,
     .4
   );
@@ -452,14 +488,32 @@ canvas{
   scene.add(stadiumLight2);
 
   // Extra fill light from center field
-  const fillLight = new THREE.DirectionalLight(0xfff8f0, 1.8);
+  const fillLight = new THREE.DirectionalLight(0xfff8f0, 3.5);
   fillLight.position.set(0, 20, -15);
   scene.add(fillLight);
 
+  // Outfield brightening light
+  const outfieldLight = new THREE.DirectionalLight(0xd0e8ff, 6.5);
+  outfieldLight.position.set(0, 30, -40);
+  outfieldLight.target.position.set(0, 0, -15);
+  scene.add(outfieldLight);
+  scene.add(outfieldLight.target);
+
+  // Dead center spotlight — floods center field and back of stands
+  const centerLight1 = new THREE.SpotLight(0xffffff, 18.0, 120, Math.PI / 3.5, 0.5);
+  centerLight1.position.set(0, 45, -5);
+  centerLight1.target.position.set(0, 0, -25);
+  scene.add(centerLight1);
+  scene.add(centerLight1.target);
+
+  const centerLight2 = new THREE.PointLight(0xfff5e0, 10.0, 80);
+  centerLight2.position.set(0, 20, -30);
+  scene.add(centerLight2);
+
   const goldLight = new THREE.PointLight(
     0xC8972B,
-    5.0,
-    40
+    8.0,
+    60
   );
 
   goldLight.position.set(0,6,6);
@@ -479,7 +533,7 @@ canvas{
   );
 
   const skyMat = new THREE.MeshBasicMaterial({
-    color:0x142338,
+    color:0x5bbef5,
     side:THREE.BackSide
   });
 
@@ -522,7 +576,7 @@ canvas{
     })
   );
 
-  scene.add(stars);
+  // stars hidden for daytime
 
   // =====================================================
   // FIELD
@@ -531,7 +585,7 @@ canvas{
   const field = new THREE.Mesh(
     new THREE.PlaneGeometry(70,70),
     new THREE.MeshLambertMaterial({
-      color:0x1f5f2a
+      color:0x2e8b3c
     })
   );
 
@@ -581,11 +635,10 @@ canvas{
 
   scene.add(warningTrack);
 
-  // infield dirt — large circle covering the whole infield area
-  // Diamond center in world: x=0, z=-0.5 (midpoint of all four bases)
+  // infield dirt — full circle around all bases
 
   const infield = new THREE.Mesh(
-    new THREE.CircleGeometry(12, 64),
+    new THREE.CircleGeometry(17, 64),
     new THREE.MeshLambertMaterial({
       color:0x9a6338
     })
@@ -609,15 +662,15 @@ canvas{
   // Straight edges with small concave (inward) arcs only at each base corner.
   // Control points pulled ~1.8 units toward field center (0, 0.7).
 
-  igShape.moveTo( 0.856, -4.459);          // just past home, heading to 1st
-  igShape.lineTo( 4.944, -0.441);          // approach 1st base corner
-  igShape.quadraticCurveTo( 4.0,  0.50,  4.973,  1.269);  // inward notch at 1st
-  igShape.lineTo( 0.827,  5.631);          // approach 2nd base corner
-  igShape.quadraticCurveTo( 0.0,  4.70, -0.827,  5.631);  // inward notch at 2nd
-  igShape.lineTo(-4.973,  1.269);          // approach 3rd base corner
-  igShape.quadraticCurveTo(-4.0,  0.50, -4.944, -0.441);  // inward notch at 3rd
-  igShape.lineTo(-0.856, -4.459);          // approach home corner
-  igShape.quadraticCurveTo( 0.0, -3.50,  0.856, -4.459);  // inward notch at home
+  igShape.moveTo( 1.284, -6.689);          // just past home, heading to 1st
+  igShape.lineTo( 7.416, -0.662);          // approach 1st base corner
+  igShape.quadraticCurveTo( 6.0,  0.75,  7.460,  1.904);  // inward notch at 1st
+  igShape.lineTo( 1.241,  8.447);          // approach 2nd base corner
+  igShape.quadraticCurveTo( 0.0,  7.05, -1.241,  8.447);  // inward notch at 2nd
+  igShape.lineTo(-7.460,  1.904);          // approach 3rd base corner
+  igShape.quadraticCurveTo(-6.0,  0.75, -7.416, -0.662);  // inward notch at 3rd
+  igShape.lineTo(-1.284, -6.689);          // approach home corner
+  igShape.quadraticCurveTo( 0.0, -5.25,  1.284, -6.689);  // inward notch at home
   igShape.closePath();
 
   const innerGrass = new THREE.Mesh(
@@ -635,14 +688,14 @@ canvas{
   // home plate area dirt circle
 
   const homeDirt = new THREE.Mesh(
-    new THREE.CircleGeometry(3.8,32),
+    new THREE.CircleGeometry(5.5,32),
     new THREE.MeshLambertMaterial({
       color:0x9a6338
     })
   );
 
   homeDirt.rotation.x = -Math.PI/2;
-  homeDirt.position.set(0,.031,6);
+  homeDirt.position.set(0,.031,9);
 
   scene.add(homeDirt);
 
@@ -650,8 +703,8 @@ canvas{
 
   const mound = new THREE.Mesh(
     new THREE.CylinderGeometry(
-      1.5,
-      1.9,
+      2.25,
+      2.85,
       .35,
       32
     ),
@@ -660,7 +713,7 @@ canvas{
     })
   );
 
-  mound.position.set(0,.16,0);
+  mound.position.set(0,.16,-2);
   mound.castShadow = true;
   mound.userData = { label: 'Post High School', url: 'post-hs.html' };
 
@@ -669,7 +722,7 @@ canvas{
   // pitcher's rubber
 
   const rubber = new THREE.Mesh(
-    new THREE.BoxGeometry(.55,.06,.18),
+    new THREE.BoxGeometry(.82,.06,.27),
     new THREE.MeshLambertMaterial({
       color:0xfafafa,
       emissive:0xffffff,
@@ -677,7 +730,7 @@ canvas{
     })
   );
 
-  rubber.position.set(0,.335,0);
+  rubber.position.set(0,.335,-2);
   rubber.castShadow = true;
 
   scene.add(rubber);
@@ -686,43 +739,17 @@ canvas{
   // BASES
   // =====================================================
 
-  const H_=[0,6];
-  const F_=[6.5,-0.5];
-  const S_=[0,-7];
-  const T_=[-6.5,-0.5];
+  const H_=[0,9];
+  const F_=[9.75,-0.75];
+  const S_=[0,-10.5];
+  const T_=[-9.75,-0.75];
 
-  // dirt baselines
-
-  [[H_,F_],[F_,S_],[S_,T_],[T_,H_]].forEach(([a,b])=>{
-
-    const dx=b[0]-a[0];
-    const dz=b[1]-a[1];
-
-    const len=Math.sqrt(dx*dx+dz*dz);
-
-    const strip=new THREE.Mesh(
-      new THREE.PlaneGeometry(.9,len),
-      new THREE.MeshLambertMaterial({
-        color:0x9a6338
-      })
-    );
-
-    strip.rotation.x=-Math.PI/2;
-    strip.rotation.z=-Math.atan2(dx,dz);
-
-    strip.position.set(
-      (a[0]+b[0])/2,
-      .04,
-      (a[1]+b[1])/2
-    );
-
-    scene.add(strip);
-  });
+  // dirt baselines removed — dirt diamond covers the baseline area
 
   // foul lines
 
   // Foul lines: originate at home plate, pass through 1st/3rd base corners, extend to outfield
-  [[[2.6,4.7],[16,-10]],[[-2.6,4.7],[-16,-10]]].forEach(([a,b])=>{
+  [[[3.9,7.05],[36,-23]],[[-3.9,7.05],[-36,-23]]].forEach(([a,b])=>{
 
     const dx=b[0]-a[0];
     const dz=b[1]-a[1];
@@ -730,7 +757,7 @@ canvas{
     const len=Math.sqrt(dx*dx+dz*dz);
 
     const line=new THREE.Mesh(
-      new THREE.PlaneGeometry(.15,len),
+      new THREE.PlaneGeometry(.32,len),
       new THREE.MeshBasicMaterial({
         color:0xffffff,
         transparent:true,
@@ -754,11 +781,11 @@ canvas{
 
   const homeShape = new THREE.Shape();
 
-  homeShape.moveTo(-.45,.55);
-  homeShape.lineTo(.45,.55);
-  homeShape.lineTo(.45,-.1);
-  homeShape.lineTo(0,-.55);
-  homeShape.lineTo(-.45,-.1);
+  homeShape.moveTo(-.68,.83);
+  homeShape.lineTo(.68,.83);
+  homeShape.lineTo(.68,-.15);
+  homeShape.lineTo(0,-.83);
+  homeShape.lineTo(-.68,-.15);
   homeShape.closePath();
 
   const homePlate = new THREE.Mesh(
@@ -789,12 +816,12 @@ canvas{
     transparent: true,
     opacity: 0.9
   });
-  const lineW = 0.08; // line thickness
-  const bW = 1.0;     // box half-width
-  const bH = 1.3;     // box half-height
+  const lineW = 0.18; // line thickness
+  const bW = 1.5;     // box half-width
+  const bH = 2.0;     // box half-height
 
   [1, -1].forEach(side => {
-    const cx = side * (bW + 0.6); // offset left/right from plate
+    const cx = side * (bW + 0.9); // offset left/right from plate
     const cz = H_[1];
 
     // top, bottom, left, right edges
@@ -817,7 +844,7 @@ canvas{
 
 
   const firstBase = new THREE.Mesh(
-    new THREE.BoxGeometry(1,.14,1),
+    new THREE.BoxGeometry(1.5,.14,1.5),
     new THREE.MeshLambertMaterial({
       color:0xC8972B,
       emissive:0xC8972B,
@@ -833,7 +860,7 @@ canvas{
   // 2nd base – Junior Year
 
   const secondBase = new THREE.Mesh(
-    new THREE.BoxGeometry(1,.14,1),
+    new THREE.BoxGeometry(1.5,.14,1.5),
     new THREE.MeshLambertMaterial({
       color:0x00205B,
       emissive:0x0030aa,
@@ -849,7 +876,7 @@ canvas{
   // 3rd base – Senior Year
 
   const thirdBase = new THREE.Mesh(
-    new THREE.BoxGeometry(1,.14,1),
+    new THREE.BoxGeometry(1.5,.14,1.5),
     new THREE.MeshLambertMaterial({
       color:0xC8972B,
       emissive:0xC8972B,
@@ -871,7 +898,7 @@ canvas{
   [H_,F_,S_,T_].forEach(pos=>{
 
     const glow = new THREE.Mesh(
-      new THREE.RingGeometry(.9,1.5,32),
+      new THREE.RingGeometry(1.35,2.25,32),
       new THREE.MeshBasicMaterial({
         color:0xffffff,
         transparent:true,
@@ -888,256 +915,154 @@ canvas{
   });
 
   // =====================================================
-  // OUTFIELD WALL — navy/gold panels with white padding rail
+  // STADIUM BOWL — full wrap-around seating with lights on top
   // =====================================================
 
-  const WALL_R = 23, WALL_SEGS = 40, WALL_H = 3.2;
-  for(let i = 0; i <= WALL_SEGS; i++){
-    const angle = (i / WALL_SEGS) * Math.PI;
-    const wx = Math.cos(angle - Math.PI/2) * WALL_R;
-    const wz = Math.sin(angle - Math.PI/2) * WALL_R - 3;
+  // Bowl parameters
+  const BOWL_CX     = 0;
+  const BOWL_CZ     = -1;          // roughly diamond center
+  const BOWL_ROWS   = 16;
+  const BOWL_SEGS   = 44;          // angular segments around the bowl
+  const BOWL_R0     = 38;          // inner radius (bottom row, just outside outfield wall)
+  const BOWL_RSTEP  = 1.4;         // each row steps back radially
+  const BOWL_HSTEP  = 1.3;         // each row rises this much
+  // Arc covers ~320° — leaves ~40° gap right behind home plate (camera side)
+  const BOWL_ASTART = -Math.PI;
+  const BOWL_AEND   =  Math.PI;
 
-    const panel = new THREE.Mesh(
-      new THREE.BoxGeometry(1.9, WALL_H, 0.4),
-      new THREE.MeshLambertMaterial({
-        color: i % 2 === 0 ? 0x00205B : 0xC8972B,
-        emissive: i % 2 === 0 ? 0x001030 : 0x5f3400,
-        emissiveIntensity: .5
-      })
-    );
-    panel.position.set(wx, WALL_H/2, wz);
-    panel.rotation.y = angle;
-    panel.castShadow = true;
-    scene.add(panel);
+  const crowdCols = [0xC8972B, 0x00205B, 0xffffff, 0xeeeeee, 0xff5555, 0x4499ff];
 
-    // white padding rail on top
-    const rail = new THREE.Mesh(
-      new THREE.BoxGeometry(1.9, 0.28, 0.55),
-      new THREE.MeshLambertMaterial({ color: 0xf0f0f0 })
-    );
-    rail.position.set(wx, WALL_H + 0.14, wz);
-    rail.rotation.y = angle;
-    scene.add(rail);
-  }
+  for(let r = 0; r < BOWL_ROWS; r++){
+    const radius = BOWL_R0 + r * BOWL_RSTEP;
+    const yBase  = 1.0 + r * BOWL_HSTEP;
+    const col    = r % 2 === 0 ? 0x1155cc : 0xe8aa30;
+    const emCol  = r % 2 === 0 ? 0x4488ff : 0xffcc55;
+    const segArc = radius * (BOWL_AEND - BOWL_ASTART) / BOWL_SEGS;
+    const segW   = segArc * 0.94;
 
-  // =====================================================
-  // STADIUM — visible rows of seats directly behind outfield
-  // =====================================================
+    for(let s = 0; s < BOWL_SEGS; s++){
+      const t     = (s + 0.5) / BOWL_SEGS;
+      const angle = BOWL_ASTART + t * (BOWL_AEND - BOWL_ASTART);
+      const sx    = BOWL_CX + radius * Math.cos(angle);
+      const sz    = BOWL_CZ + radius * Math.sin(angle);
+      // rotation so the box faces inward toward field center
+      const rot   = Math.atan2(-Math.cos(angle), -Math.sin(angle));
 
-  // --- BACK WALL: flat concrete retaining wall behind seats ---
-  const backWall = new THREE.Mesh(
-    new THREE.BoxGeometry(70, 22, 1.2),
-    new THREE.MeshLambertMaterial({ color: 0x141e30, emissive: 0x060912, emissiveIntensity: .4 })
-  );
-  backWall.position.set(0, 11, -28);
-  scene.add(backWall);
-
-  // --- SEAT ROWS: 14 stacked rows rising up the back wall ---
-  const ROWS      = 14;
-  const ROW_H     = 1.35;   // vertical step per row
-  const ROW_DEPTH = 0.55;   // how deep each row is (z thickness)
-  const ROW_W     = 64;     // how wide each row is
-
-  for(let r = 0; r < ROWS; r++){
-    const yPos  = 1.2 + r * ROW_H;
-    const zPos  = -24.5 - r * 0.55;   // step back as rows rise
-    const col   = r % 2 === 0 ? 0x00205B : 0xC8972B;
-    const emCol = r % 2 === 0 ? 0x000e2a : 0x3a1e00;
-
-    // Seat strip
-    const seatRow = new THREE.Mesh(
-      new THREE.BoxGeometry(ROW_W, 0.22, ROW_DEPTH),
-      new THREE.MeshLambertMaterial({ color: col, emissive: emCol, emissiveIntensity: .35 })
-    );
-    seatRow.position.set(0, yPos, zPos);
-    scene.add(seatRow);
-
-    // Concrete riser beneath each row
-    const riser = new THREE.Mesh(
-      new THREE.BoxGeometry(ROW_W, ROW_H * 0.78, 0.28),
-      new THREE.MeshLambertMaterial({ color: 0x1a2540, emissive: 0x070c1a, emissiveIntensity: .3 })
-    );
-    riser.position.set(0, yPos - ROW_H * 0.4, zPos + 0.25);
-    scene.add(riser);
-
-    // Crowd dots in this row
-    const crowdColors = [0xC8972B, 0x00205B, 0xffffff, 0xeeeeee, 0xff5555, 0x4499ff];
-    const dotsInRow = 55;
-    for(let d = 0; d < dotsInRow; d++){
-      const dx  = -ROW_W/2 + 1 + (d / (dotsInRow-1)) * (ROW_W - 2) + (Math.random()-0.5)*0.6;
-      const dcol = crowdColors[Math.floor(Math.random() * crowdColors.length)];
-      const head = new THREE.Mesh(
-        new THREE.SphereGeometry(0.19 + Math.random()*0.07, 6, 6),
-        new THREE.MeshLambertMaterial({ color: dcol, emissive: dcol, emissiveIntensity: .4 })
+      // Seat strip
+      const seat = new THREE.Mesh(
+        new THREE.BoxGeometry(segW, 0.22, 0.5),
+        new THREE.MeshLambertMaterial({ color: col, emissive: emCol, emissiveIntensity: 2.2 })
       );
-      head.position.set(dx, yPos + 0.42, zPos - 0.1 + Math.random()*0.2);
-      scene.add(head);
-    }
-  }
+      seat.rotation.y = rot;
+      seat.position.set(sx, yBase, sz);
+      scene.add(seat);
 
-  // --- SIDE STANDS: angled rows down both foul lines ---
-  [[-1, -1], [1, 1]].forEach(([side, _]) => {
-    const SIDE_ROWS   = 10;
-    const STAND_W     = 26;
-    const startX      = side * 20;
-    const startZ      = 6;
-
-    for(let r = 0; r < SIDE_ROWS; r++){
-      const yPos  = 0.8 + r * 1.2;
-      const zPos  = startZ - r * 0.5;
-      const xOff  = side * (14 + r * 0.4);
-      const col   = r % 2 === 0 ? 0x00205B : 0xC8972B;
-      const emCol = r % 2 === 0 ? 0x000e2a : 0x3a1e00;
-
-      const seatRow = new THREE.Mesh(
-        new THREE.BoxGeometry(0.22, 0.2, STAND_W),
-        new THREE.MeshLambertMaterial({ color: col, emissive: emCol, emissiveIntensity: .35 })
-      );
-      seatRow.position.set(xOff, yPos, zPos - STAND_W/2 + 10);
-      scene.add(seatRow);
-
+      // Concrete riser behind each seat row
       const riser = new THREE.Mesh(
-        new THREE.BoxGeometry(0.28, 1.0, STAND_W),
-        new THREE.MeshLambertMaterial({ color: 0x1a2540, emissive: 0x070c1a, emissiveIntensity: .3 })
+        new THREE.BoxGeometry(segW, BOWL_HSTEP * 0.75, 0.32),
+        new THREE.MeshLambertMaterial({ color: 0xc8d4e8, emissive: 0xd0daf0, emissiveIntensity: 1.8 })
       );
-      riser.position.set(xOff - side*0.22, yPos - 0.5, zPos - STAND_W/2 + 10);
+      riser.rotation.y = rot;
+      riser.position.set(
+        sx + Math.cos(angle) * 0.38,
+        yBase - BOWL_HSTEP * 0.4,
+        sz + Math.sin(angle) * 0.38
+      );
       scene.add(riser);
 
-      // Crowd dots
-      for(let d = 0; d < 22; d++){
-        const dz   = zPos - STAND_W/2 + 1 + (d / 21) * (STAND_W - 2) + (Math.random()-0.5)*0.5;
-        const dcol = [0xC8972B,0x00205B,0xffffff,0xeeeeee][Math.floor(Math.random()*4)];
+      // Crowd dots spread tangentially across the segment
+      const tangX = -Math.sin(angle);
+      const tangZ =  Math.cos(angle);
+      for(let d = 0; d < 3; d++){
+        const tOff = (d / 2 - 0.5) * (segW - 0.8);
+        const dcol = crowdCols[Math.floor(Math.random() * crowdCols.length)];
         const head = new THREE.Mesh(
-          new THREE.SphereGeometry(0.18 + Math.random()*0.06, 5, 5),
-          new THREE.MeshLambertMaterial({ color: dcol, emissive: dcol, emissiveIntensity: .4 })
+          new THREE.SphereGeometry(0.19 + Math.random()*0.07, 5, 5),
+          new THREE.MeshLambertMaterial({ color: dcol, emissive: dcol, emissiveIntensity: 2.2 })
         );
-        head.position.set(xOff + side*0.3, yPos + 0.4, dz);
+        head.position.set(
+          sx + tangX * tOff + (Math.random()-0.5)*0.25,
+          yBase + 0.42,
+          sz + tangZ * tOff + (Math.random()-0.5)*0.25
+        );
         scene.add(head);
       }
     }
-  });
+  }
 
-
-
-  // =====================================================
-  // SCOREBOARD — center field, on pillars with glowing screen
-  // =====================================================
-
-  // Support pillars
-  [-4, 4].forEach(px => {
-    const pillar = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.35, 0.45, 16, 10),
-      new THREE.MeshLambertMaterial({ color: 0x2a2a3a, emissive: 0x0a0a18, emissiveIntensity: .3 })
+  // Concrete back wall — one ring of panels at the outermost radius
+  const wallR = BOWL_R0 + BOWL_ROWS * BOWL_RSTEP + 0.9;
+  const wallH = BOWL_ROWS * BOWL_HSTEP + 4;
+  for(let s = 0; s < BOWL_SEGS; s++){
+    const t     = (s + 0.5) / BOWL_SEGS;
+    const angle = BOWL_ASTART + t * (BOWL_AEND - BOWL_ASTART);
+    const wx    = BOWL_CX + wallR * Math.cos(angle);
+    const wz    = BOWL_CZ + wallR * Math.sin(angle);
+    const rot   = Math.atan2(-Math.cos(angle), -Math.sin(angle));
+    const panW  = wallR * (BOWL_AEND - BOWL_ASTART) / BOWL_SEGS * 1.03;
+    const panel = new THREE.Mesh(
+      new THREE.BoxGeometry(panW, wallH, 0.7),
+      new THREE.MeshLambertMaterial({ color: 0xdde4f0, emissive: 0xe8eeff, emissiveIntensity: 2.0 })
     );
-    pillar.position.set(px, 8, -26);
-    pillar.castShadow = true;
-    scene.add(pillar);
-  });
+    panel.rotation.y = rot;
+    panel.position.set(wx, wallH / 2, wz);
+    scene.add(panel);
+  }
 
-  // Main board frame (gold border)
-  const sbFrame = new THREE.Mesh(
-    new THREE.BoxGeometry(12, 7.2, 0.7),
-    new THREE.MeshLambertMaterial({ color: 0xC8972B, emissive: 0x5a3500, emissiveIntensity: .55 })
-  );
-  sbFrame.position.set(0, 18, -25.5);
-  sbFrame.castShadow = true;
-  scene.add(sbFrame);
+  // Stadium lights — 8 banks evenly spaced on top of the upper deck
+  const lightR = BOWL_R0 + (BOWL_ROWS - 0.5) * BOWL_RSTEP;
+  const lightY = 1.0 + BOWL_ROWS * BOWL_HSTEP + 4.5;
+  for(let ls = 0; ls < 8; ls++){
+    const t     = (ls + 0.5) / 8;
+    const angle = BOWL_ASTART + t * (BOWL_AEND - BOWL_ASTART);
+    const lx    = BOWL_CX + lightR * Math.cos(angle);
+    const lz    = BOWL_CZ + lightR * Math.sin(angle);
+    const rot   = Math.atan2(-Math.cos(angle), -Math.sin(angle));
+    // Inward direction unit vector
+    const inX   = -Math.cos(angle);
+    const inZ   = -Math.sin(angle);
 
-  // Dark board backing
-  const sbBack = new THREE.Mesh(
-    new THREE.BoxGeometry(11.0, 6.2, 0.5),
-    new THREE.MeshLambertMaterial({ color: 0x05080f, emissive: 0x010305, emissiveIntensity: .5 })
-  );
-  sbBack.position.set(0, 18, -25.2);
-  scene.add(sbBack);
-
-  // Glowing LED screen
-  const sbScreen = new THREE.Mesh(
-    new THREE.PlaneGeometry(9.8, 5.2),
-    new THREE.MeshBasicMaterial({ color: 0x0a1f5c })
-  );
-  sbScreen.position.set(0, 18, -25.0);
-  scene.add(sbScreen);
-
-  // Screen content rows (score lines)
-  const rowColors = [0xC8972B, 0x1a3acc, 0xC8972B, 0x0a0a50];
-  [1.8, 0.6, -0.6, -1.8].forEach((ry, ri) => {
-    const rowBar = new THREE.Mesh(
-      new THREE.PlaneGeometry(9.0, 0.9),
-      new THREE.MeshBasicMaterial({ color: rowColors[ri], transparent: true, opacity: ri % 2 === 0 ? 0.55 : 0.3 })
-    );
-    rowBar.position.set(0, 18 + ry, -24.95);
-    scene.add(rowBar);
-  });
-
-  // Scoreboard glow light
-  const sbGlow = new THREE.PointLight(0x3355ff, 4.5, 40);
-  sbGlow.position.set(0, 18, -23);
-  scene.add(sbGlow);
-
-  // "SCOREBOARD" gold top banner strip
-  const sbBanner = new THREE.Mesh(
-    new THREE.BoxGeometry(12, 0.9, 0.3),
-    new THREE.MeshLambertMaterial({ color: 0xC8972B, emissive: 0xC8972B, emissiveIntensity: .8 })
-  );
-  sbBanner.position.set(0, 22.1, -25.4);
-  scene.add(sbBanner);
-
-  // =====================================================
-  // LIGHT TOWERS — 4 towers with bright flood lights
-  // =====================================================
-
-  function makeLightTower(x, z){
-    // Main pole
+    // Vertical pole on top of back wall
     const pole = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.22, 0.32, 28, 10),
+      new THREE.CylinderGeometry(0.16, 0.22, 3.5, 8),
       new THREE.MeshLambertMaterial({ color: 0x778899 })
     );
-    pole.position.set(x, 14, z);
-    pole.castShadow = true;
+    pole.position.set(lx, lightY - 1.8, lz);
     scene.add(pole);
 
-    // Horizontal arm
+    // Horizontal arm angled inward over the field
     const arm = new THREE.Mesh(
-      new THREE.BoxGeometry(7, 0.3, 0.3),
+      new THREE.BoxGeometry(0.22, 0.22, 5),
       new THREE.MeshLambertMaterial({ color: 0x667788 })
     );
-    arm.position.set(x, 27.5, z);
+    arm.rotation.y = rot;
+    arm.position.set(lx + inX * 2.0, lightY, lz + inZ * 2.0);
     scene.add(arm);
 
-    // Light fixtures (2 rows × 4 cols)
-    for(let row = 0; row < 2; row++){
-      for(let col = 0; col < 4; col++){
-        const lamp = new THREE.Mesh(
-          new THREE.BoxGeometry(1.1, 0.55, 0.6),
-          new THREE.MeshLambertMaterial({ color: 0xfff8c8, emissive: 0xfff8c8, emissiveIntensity: 2.0 })
-        );
-        lamp.position.set(x + (col - 1.5) * 1.6, 28.2 + row * 0.7, z + 0.4);
-        scene.add(lamp);
-      }
-    }
+    // Glowing light bank
+    const bank = new THREE.Mesh(
+      new THREE.BoxGeometry(5, 0.8, 0.65),
+      new THREE.MeshLambertMaterial({ color: 0xfff8c8, emissive: 0xfff8c8, emissiveIntensity: 2.2 })
+    );
+    bank.rotation.y = rot;
+    bank.position.set(lx + inX * 3.5, lightY + 0.2, lz + inZ * 3.5);
+    scene.add(bank);
 
-    // Actual spotlight
-    const fl = new THREE.SpotLight(0xfff9e8, 5.0, 120, Math.PI/6, 0.4);
-    fl.position.set(x, 28, z);
-    fl.target.position.set(0, 0, 0);
-    fl.castShadow = true;
+    // Spotlight aimed at the infield
+    const fl = new THREE.SpotLight(0xfff9e8, 14.0, 160, Math.PI / 5, 0.45);
+    fl.position.set(lx + inX * 3, lightY + 0.2, lz + inZ * 3);
+    fl.target.position.set(0, 0, -1);
+    fl.castShadow = false;
     scene.add(fl);
     scene.add(fl.target);
   }
 
-  makeLightTower(-20, -5);
-  makeLightTower( 20, -5);
-  makeLightTower(-16, -20);
-  makeLightTower( 16, -20);
-
   // =====================================================
   // NIGHT SKY backdrop
-  // =====================================================
 
   const sky2 = new THREE.Mesh(
     new THREE.CylinderGeometry(55, 55, 50, 64, 1, true),
-    new THREE.MeshBasicMaterial({ color: 0x020508, side: THREE.BackSide })
+    new THREE.MeshBasicMaterial({ color: 0x5bbef5, side: THREE.BackSide })
   );
   sky2.position.set(0, 14, -3);
   scene.add(sky2);
@@ -1154,9 +1079,7 @@ canvas{
   }
   const sGeo = new THREE.BufferGeometry();
   sGeo.setAttribute('position', new THREE.BufferAttribute(starBuf, 3));
-  scene.add(new THREE.Points(sGeo,
-    new THREE.PointsMaterial({ color: 0xffffff, size: 0.16, transparent: true, opacity: 0.8 })
-  ));
+  // stars hidden for daytime
 
 
 
@@ -1175,7 +1098,7 @@ canvas{
     })
   );
 
-  ball.scale.set(1.4, 2.4, 1);
+  ball.scale.set(2.0, 3.4, 1);
   scene.add(ball);
 
   const ballLight = new THREE.PointLight(
@@ -1216,6 +1139,7 @@ canvas{
   // Swing panel elements
   const swingPanel      = document.getElementById('swing-panel');
   const swingTriggerBtn = document.getElementById('swing-trigger-btn');
+  const runTriggerBtn   = document.getElementById('run-trigger-btn');
   const swingMeterWrap  = document.getElementById('swing-meter-wrap');
   const swingCursor     = document.getElementById('swing-cursor');
   const swingResult     = document.getElementById('swing-result-badge');
@@ -1263,6 +1187,7 @@ canvas{
     swingResult.textContent = '';
     swingMeterWrap.style.display = 'block';
     swingTriggerBtn.style.display = 'none';
+    runTriggerBtn.style.display   = 'none';
     swingStopBtn.style.display = 'block';
     if(swingRAF) cancelAnimationFrame(swingRAF);
     swingRAF = requestAnimationFrame(animateCursor);
@@ -1278,6 +1203,7 @@ canvas{
     swingMeterWrap.style.display = 'none';
     swingTriggerBtn.style.display = 'block';
     swingTriggerBtn.textContent = 'SWING';
+    runTriggerBtn.style.display   = 'block';
     swingStopBtn.style.display = 'none';
     swingResult.textContent = '';
   }
@@ -1286,6 +1212,11 @@ canvas{
   function hideSwingPanel(){ swingPanel.classList.remove('visible'); resetSwingPanel(); }
 
   swingTriggerBtn.addEventListener('click', () => { startSwingMeter(); });
+
+  runTriggerBtn.addEventListener('click', () => {
+    hideSwingPanel();
+    advanceBases(1);
+  });
 
   swingStopBtn.addEventListener('click', () => {
     if(!swingRunning) return;
@@ -1303,6 +1234,7 @@ canvas{
         swingMeterWrap.style.display = 'none';
         swingTriggerBtn.textContent = 'SWING AGAIN';
         swingTriggerBtn.style.display = 'block';
+        runTriggerBtn.style.display = 'block';
       }, 1000);
     } else {
       setTimeout(() => {
@@ -1477,9 +1409,10 @@ canvas{
 
     const bp = getBallPos(ballSeg,ballT);
 
-    // When waiting at home plate, stand in the right batter's box
+    // When waiting at home plate, stand in the left batter's box
     if(paused && currentBase === 0){
-      bp.x = -1.6;
+      bp.x = -2.6;
+      bp.z = 9;
     }
 
     ball.position.copy(bp);
@@ -1496,7 +1429,7 @@ canvas{
     });
 
     goldLight.intensity =
-      2.3 + Math.sin(elapsed*3)*.4;
+      6.0 + Math.sin(elapsed*3)*.6;
 
     renderer.render(scene,camera);
 

@@ -131,6 +131,158 @@ canvas{
   background:#e0ab35;
   transform:scale(1.04);
 }
+
+/* Run Again button (home plate) */
+#home-advance-btn{
+  display:inline-block;
+  background:#C8972B;
+  color:#00205B;
+  font-weight:700;
+  font-size:.85rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:12px 30px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background .2s,transform .1s;
+  margin-top:8px;
+}
+#home-advance-btn:hover{ background:#e0ab35; transform:scale(1.04); }
+
+/* ── Swing panel (fixed side widget) ─────────────────── */
+#swing-panel{
+  position:fixed;
+  right:28px;
+  top:50%;
+  transform:translateY(-50%) translateX(120%);
+  z-index:60;
+  background:linear-gradient(160deg,#00205B 0%,#0a1535 100%);
+  border:2px solid #C8972B;
+  border-radius:12px;
+  padding:22px 26px;
+  width:240px;
+  text-align:center;
+  box-shadow:0 0 50px rgba(200,151,43,.4);
+  transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .4s;
+  opacity:0;
+  pointer-events:none;
+}
+#swing-panel.visible{
+  transform:translateY(-50%) translateX(0);
+  opacity:1;
+  pointer-events:all;
+}
+#swing-panel .sp-label{
+  color:#C8972B;
+  font-size:.65rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+#swing-trigger-btn{
+  display:inline-block;
+  background:#C8972B;
+  color:#00205B;
+  font-weight:700;
+  font-size:.9rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:13px 28px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  width:100%;
+  transition:background .2s,transform .1s;
+}
+#swing-trigger-btn:hover{ background:#e0ab35; transform:scale(1.03); }
+#swing-meter-wrap{ display:none; margin-top:14px; }
+#swing-meter-track{
+  position:relative;
+  display:flex;
+  height:18px;
+  border-radius:4px;
+  overflow:hidden;
+  margin-bottom:8px;
+  border:1px solid rgba(200,151,43,.4);
+}
+.sm-zone{ height:100%; }
+.sm-foul   { flex:10; background:#3a1515; }
+.sm-single { flex:12; background:#1a3a1a; }
+.sm-double { flex:10; background:#1a2e4a; }
+.sm-triple { flex:8;  background:#2a1a4a; }
+.sm-homer  { flex:8;  background:#5a3800; }
+#swing-cursor{
+  position:absolute;
+  top:0; bottom:0;
+  width:3px;
+  background:#fff;
+  box-shadow:0 0 8px #fff;
+  border-radius:2px;
+  left:0;
+}
+#swing-zone-label{
+  font-size:.6rem;
+  letter-spacing:.15em;
+  color:#7a8fb0;
+  margin-bottom:8px;
+}
+#swing-result-badge{
+  font-size:1.5rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  min-height:2rem;
+  margin-bottom:8px;
+  color:#C8972B;
+  text-shadow:0 0 18px rgba(200,151,43,.7);
+}
+#swing-stop-btn{
+  display:none;
+  background:#fff;
+  color:#00205B;
+  font-weight:700;
+  font-size:.85rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:11px 0;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  width:100%;
+  transition:background .2s;
+}
+#swing-stop-btn:hover{ background:#e0ab35; }
+
+/* Base action buttons (run next / go home) */
+#base-actions{
+  display:none;
+  margin-bottom:6px;
+}
+#base-run-next-btn, #base-go-home-btn{
+  display:block;
+  width:100%;
+  font-weight:700;
+  font-size:.85rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:12px 0;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background .2s,transform .1s;
+}
+#base-run-next-btn{
+  background:#C8972B;
+  color:#00205B;
+  margin-bottom:10px;
+}
+#base-run-next-btn:hover{ background:#e0ab35; transform:scale(1.03); }
+#base-go-home-btn{
+  background:transparent;
+  color:#C8972B;
+  border:2px solid #C8972B;
+}
+#base-go-home-btn:hover{ background:rgba(200,151,43,.12); }
 #base-modal-view{
   display:block;
   margin-top:14px;
@@ -180,9 +332,40 @@ canvas{
   <div id="base-modal">
     <div class="modal-base-label" id="modal-base-label">First Base</div>
     <h2 id="modal-title">Sophomore Year</h2>
-    <p id="modal-desc">Ready to advance to the next base?</p>
-    <button id="base-modal-advance">Advance to Next Base</button>
+    <p id="modal-desc">Step up to the plate — use the swing meter to advance!</p>
+    <!-- At 1st/2nd/3rd: run forward or retreat home -->
+    <div id="base-actions">
+      <button id="base-run-next-btn">Run to Next Base</button>
+      <button id="base-go-home-btn">Go Back to Home Plate</button>
+    </div>
+    <!-- After scoring -->
+    <div id="home-section" style="display:none">
+      <button id="home-advance-btn">Run the Bases Again</button>
+    </div>
     <a id="base-modal-view" href="#" target="_blank">View Portfolio Page</a>
+  </div>
+</div>
+
+<!-- Swing panel — fixed to the right side -->
+<div id="swing-panel">
+  <div class="sp-label">⚾ Batter Up!</div>
+  <button id="swing-trigger-btn">SWING</button>
+  <div id="swing-meter-wrap">
+    <div id="swing-meter-track">
+      <div class="sm-zone sm-foul"></div>
+      <div class="sm-zone sm-single"></div>
+      <div class="sm-zone sm-double"></div>
+      <div class="sm-zone sm-triple"></div>
+      <div class="sm-zone sm-homer"></div>
+      <div class="sm-zone sm-triple"></div>
+      <div class="sm-zone sm-double"></div>
+      <div class="sm-zone sm-single"></div>
+      <div class="sm-zone sm-foul"></div>
+      <div id="swing-cursor"></div>
+    </div>
+    <div id="swing-zone-label">FOUL · SINGLE · DOUBLE · TRIPLE · HR</div>
+    <div id="swing-result-badge"></div>
+    <button id="swing-stop-btn">STOP</button>
   </div>
 </div>
 
@@ -1007,42 +1190,183 @@ canvas{
 
   // Data shown in the modal when the player arrives at each base
   const stopData = [
-    { baseLabel: 'First Base',  title: 'Sophomore Year',     desc: 'You\'ve reached first! Ready to advance to second base?', url: 'sophomore.html' },
-    { baseLabel: 'Second Base', title: 'Junior Year',        desc: 'Halfway home! Ready to advance to third base?',           url: 'junior.html'    },
-    { baseLabel: 'Third Base',  title: 'Senior Year',        desc: 'So close! Ready to round third and head home?',           url: 'senior.html'    },
-    { baseLabel: 'Home Plate',  title: 'Before High School', desc: 'You\'ve scored! Ready to run the bases again?',           url: 'before-hs.html' },
+    { baseLabel: 'First Base',  title: 'Sophomore Year',     desc: 'You\'re on first! Run to the next base or head back home.', url: 'sophomore.html' },
+    { baseLabel: 'Second Base', title: 'Junior Year',        desc: 'Halfway there! Keep running or go back to home plate.',      url: 'junior.html'    },
+    { baseLabel: 'Third Base',  title: 'Senior Year',        desc: 'So close to home! Push forward or retreat.',                 url: 'senior.html'    },
+    { baseLabel: 'Home Plate',  title: 'Before High School', desc: 'You scored! Ready to run the bases again?',                  url: 'before-hs.html' },
   ];
 
   let ballT=0;
   let ballSeg=0;
-  let paused=false;
+  let paused=true;   // start paused at home waiting for first swing
+  let currentBase=0; // 0=home,1=first,2=second,3=third
+  let destSeg=0;     // segment index runner is heading to
 
-  const modalOverlay  = document.getElementById('base-modal-overlay');
-  const modalLabel    = document.getElementById('modal-base-label');
-  const modalTitle    = document.getElementById('modal-title');
-  const modalDesc     = document.getElementById('modal-desc');
-  const modalAdvance  = document.getElementById('base-modal-advance');
-  const modalView     = document.getElementById('base-modal-view');
+  const modalOverlay   = document.getElementById('base-modal-overlay');
+  const modalLabel     = document.getElementById('modal-base-label');
+  const modalTitle     = document.getElementById('modal-title');
+  const modalDesc      = document.getElementById('modal-desc');
+  const modalView      = document.getElementById('base-modal-view');
+  const homeSection    = document.getElementById('home-section');
+  const homeAdvanceBtn = document.getElementById('home-advance-btn');
+  const baseActions    = document.getElementById('base-actions');
+  const baseRunNextBtn = document.getElementById('base-run-next-btn');
+  const baseGoHomeBtn  = document.getElementById('base-go-home-btn');
+
+  // Swing panel elements
+  const swingPanel      = document.getElementById('swing-panel');
+  const swingTriggerBtn = document.getElementById('swing-trigger-btn');
+  const swingMeterWrap  = document.getElementById('swing-meter-wrap');
+  const swingCursor     = document.getElementById('swing-cursor');
+  const swingResult     = document.getElementById('swing-result-badge');
+  const swingStopBtn    = document.getElementById('swing-stop-btn');
+
+  // Swing meter state
+  let swingRAF = null;
+  let swingPos = 0;
+  let swingDir = 1;
+  let swingSpeed = 0.65;
+  let swingRunning = false;
+  let swingStartTime = null;
+
+  const totalFlex = 10+12+10+8+8+8+10+12+10;
+  const zoneEdges = [0];
+  [10,12,10,8,8,8,10,12,10].forEach(w => zoneEdges.push(zoneEdges[zoneEdges.length-1] + w/totalFlex));
+  const zoneHits   = ['FOUL','SINGLE','DOUBLE','TRIPLE','HOME RUN','TRIPLE','DOUBLE','SINGLE','FOUL'];
+  const zoneAdv    = [0,1,2,3,4,3,2,1,0];
+  const zoneColors = ['#8a2020','#2a7a2a','#1a5090','#6030a0','#C8972B','#6030a0','#1a5090','#2a7a2a','#8a2020'];
+
+  function getZone(pos){
+    for(let i = 0; i < zoneEdges.length-1; i++){
+      if(pos >= zoneEdges[i] && pos < zoneEdges[i+1]) return i;
+    }
+    return zoneEdges.length - 2;
+  }
+
+  function animateCursor(ts){
+    if(!swingStartTime) swingStartTime = ts;
+    const dt = Math.min((ts - swingStartTime) / 1000, 0.1);
+    swingStartTime = ts;
+    swingPos += swingDir * swingSpeed * dt;
+    if(swingPos >= 1){ swingPos = 1; swingDir = -1; }
+    if(swingPos <= 0){ swingPos = 0; swingDir =  1; }
+    swingCursor.style.left = (swingPos * 100) + '%';
+    swingCursor.style.background = zoneColors[getZone(swingPos)];
+    swingRAF = requestAnimationFrame(animateCursor);
+  }
+
+  function startSwingMeter(){
+    swingRunning     = true;
+    swingPos         = 0;
+    swingDir         = 1;
+    swingStartTime   = null;
+    swingResult.textContent = '';
+    swingMeterWrap.style.display = 'block';
+    swingTriggerBtn.style.display = 'none';
+    swingStopBtn.style.display = 'block';
+    if(swingRAF) cancelAnimationFrame(swingRAF);
+    swingRAF = requestAnimationFrame(animateCursor);
+  }
+
+  function stopSwingMeter(){
+    swingRunning = false;
+    if(swingRAF){ cancelAnimationFrame(swingRAF); swingRAF = null; }
+  }
+
+  function resetSwingPanel(){
+    stopSwingMeter();
+    swingMeterWrap.style.display = 'none';
+    swingTriggerBtn.style.display = 'block';
+    swingTriggerBtn.textContent = 'SWING';
+    swingStopBtn.style.display = 'none';
+    swingResult.textContent = '';
+  }
+
+  function showSwingPanel(){ swingPanel.classList.add('visible'); }
+  function hideSwingPanel(){ swingPanel.classList.remove('visible'); resetSwingPanel(); }
+
+  swingTriggerBtn.addEventListener('click', () => { startSwingMeter(); });
+
+  swingStopBtn.addEventListener('click', () => {
+    if(!swingRunning) return;
+    stopSwingMeter();
+    swingStopBtn.style.display = 'none';
+    const zone = getZone(swingPos);
+    const hit  = zoneHits[zone];
+    const adv  = zoneAdv[zone];
+    swingResult.textContent = hit;
+    swingResult.style.color = zoneColors[zone];
+
+    if(hit === 'FOUL'){
+      setTimeout(() => {
+        swingResult.textContent = '';
+        swingMeterWrap.style.display = 'none';
+        swingTriggerBtn.textContent = 'SWING AGAIN';
+        swingTriggerBtn.style.display = 'block';
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        hideSwingPanel();
+        hideBaseModal();
+        advanceBases(adv);
+      }, hit === 'HOME RUN' ? 1400 : 900);
+    }
+  });
+
+  function advanceBases(count){
+    // count = bases earned (1=single,2=double,3=triple,4=homer)
+    destSeg = Math.min(currentBase + count - 1, 3);
+    ballSeg = currentBase;
+    ballT   = 0;
+    paused  = false;
+  }
 
   function showBaseModal(seg){
     const d = stopData[seg];
     modalLabel.textContent = d.baseLabel;
     modalTitle.textContent = d.title;
     modalDesc.textContent  = d.desc;
-    modalAdvance.textContent = seg === stopData.length - 1 ? 'Run Again' : 'Advance to Next Base';
     modalView.href = d.url;
+    const atHome = seg === stopData.length - 1;
+    homeSection.style.display  = atHome  ? 'block' : 'none';
+    baseActions.style.display  = !atHome ? 'block' : 'none';
+    // Update "Run to Next Base" label: at 3rd it says "Run Home"
+    baseRunNextBtn.textContent = seg === 2 ? 'Run Home!' : 'Run to Next Base';
     modalOverlay.classList.add('visible');
+    if(atHome) showSwingPanel();
   }
 
   function hideBaseModal(){
     modalOverlay.classList.remove('visible');
   }
 
-  modalAdvance.addEventListener('click', () => {
+  homeAdvanceBtn.addEventListener('click', () => {
     hideBaseModal();
-    ballT = 0;
-    ballSeg = (ballSeg + 1) % (path.length - 1);
-    paused = false;
+    currentBase = 0;
+    ballSeg     = 0;
+    ballT       = 0;
+    paused      = true;
+    showSwingPanel();
+  });
+
+  // Run to next base (from 1st/2nd/3rd)
+  baseRunNextBtn.addEventListener('click', () => {
+    hideBaseModal();
+    destSeg = currentBase; // run one more segment
+    ballSeg = currentBase;
+    ballT   = 0;
+    paused  = false;
+  });
+
+  // Go back to home plate
+  baseGoHomeBtn.addEventListener('click', () => {
+    hideBaseModal();
+    // run backwards: teleport to home and wait (simplest/cleanest UX)
+    currentBase = 0;
+    ballSeg     = 0;
+    ballT       = 0;
+    paused      = true;
+    showSwingPanel();
   });
 
   function getBallPos(seg,t){
@@ -1137,13 +1461,26 @@ canvas{
       ballT += delta*.28;
 
       if(ballT>=1){
-        ballT=1;
-        paused=true;
-        showBaseModal(ballSeg);
+        if(ballSeg < destSeg){
+          // pass through this base — keep running
+          ballT  = 0;
+          ballSeg++;
+        } else {
+          // arrived at destination
+          ballT = 1;
+          paused = true;
+          currentBase = (ballSeg + 1) % 4;
+          showBaseModal(ballSeg);
+        }
       }
     }
 
     const bp = getBallPos(ballSeg,ballT);
+
+    // When waiting at home plate, stand in the right batter's box
+    if(paused && currentBase === 0){
+      bp.x = -1.6;
+    }
 
     ball.position.copy(bp);
     ballLight.position.copy(bp);
@@ -1165,6 +1502,9 @@ canvas{
 
     requestAnimationFrame(tick);
   }
+
+  // Show swing panel immediately — player starts at home waiting to hit
+  showSwingPanel();
 
   tick();
 

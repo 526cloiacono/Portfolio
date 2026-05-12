@@ -197,13 +197,25 @@ canvas{
 }
 #swing-trigger-btn:hover{ background:#e0ab35; transform:scale(1.03); }
 #swing-meter-wrap{ display:none; margin-top:14px; }
+#swing-panel.meter-active{
+  width:520px;
+  padding:30px 36px;
+}
+#swing-instructions{
+  font-size:.78rem;
+  color:#aac4ff;
+  margin-bottom:12px;
+  line-height:1.5;
+  text-align:center;
+}
+#swing-instructions strong{ color:#C8972B; }
 #swing-meter-track{
   position:relative;
   display:flex;
-  height:18px;
-  border-radius:4px;
+  height:48px;
+  border-radius:6px;
   overflow:hidden;
-  margin-bottom:8px;
+  margin-bottom:10px;
   border:1px solid rgba(200,151,43,.4);
 }
 .sm-zone{ height:100%; }
@@ -215,9 +227,9 @@ canvas{
 #swing-cursor{
   position:absolute;
   top:0; bottom:0;
-  width:3px;
+  width:5px;
   background:#fff;
-  box-shadow:0 0 8px #fff;
+  box-shadow:0 0 10px #fff;
   border-radius:2px;
   left:0;
 }
@@ -381,6 +393,7 @@ canvas{
   <div class="sp-or">— or —</div>
   <button id="run-trigger-btn">RUN</button>
   <div id="swing-meter-wrap">
+    <div id="swing-instructions">Watch the cursor bounce — click <strong>STOP</strong> when it lands in the colored zone!</div>
     <div id="swing-meter-track">
       <div class="sm-zone sm-foul"></div>
       <div class="sm-zone sm-single"></div>
@@ -393,7 +406,7 @@ canvas{
       <div class="sm-zone sm-foul"></div>
       <div id="swing-cursor"></div>
     </div>
-    <div id="swing-zone-label">FOUL · SINGLE · DOUBLE · TRIPLE · HR</div>
+    <div id="swing-zone-label"><span style="color:#3a1515">●</span> FOUL &nbsp;<span style="color:#1a3a1a">●</span> SINGLE &nbsp;<span style="color:#1a2e4a">●</span> DOUBLE &nbsp;<span style="color:#2a1a4a">●</span> TRIPLE &nbsp;<span style="color:#C8972B">●</span> HR</div>
     <div id="swing-result-badge"></div>
     <button id="swing-stop-btn">STOP</button>
   </div>
@@ -1171,6 +1184,73 @@ canvas{
   ball.scale.set(2.0, 3.4, 1);
   scene.add(ball);
 
+  // Hit ball — small white sphere that flies on contact
+  const hitBall = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xffffff })
+  );
+  hitBall.visible = false;
+  scene.add(hitBall);
+
+  let hitBallRAF = null;
+  function launchHitBall(hitType) {
+    // Target destinations per hit type
+    const targets = {
+      'SINGLE':   { x: 14,  y: 0.5,  z: -10 },   // shallow right field (fair)
+      'DOUBLE':   { x: 10,  y: 0.5,  z: -22 },   // right-center gap (fair)
+      'TRIPLE':   { x: 25,  y: 0.5,  z: -15 },   // deep right field, just inside foul line (fair)
+      'HOME RUN': { x: 0,   y: 28,   z: -35 },   // high arc into center stands (fair)
+    };
+    const target = targets[hitType];
+    if (!target) return;
+
+    const start = { x: H_[0], y: 1.5, z: H_[1] };
+    hitBall.position.set(start.x, start.y, start.z);
+    hitBall.visible = true;
+
+    const duration = hitType === 'HOME RUN' ? 2200 : 1400;
+    const startTime = performance.now();
+    const peakY = hitType === 'HOME RUN' ? 32 : hitType === 'TRIPLE' ? 10 : 7;
+
+    if (hitBallRAF) cancelAnimationFrame(hitBallRAF);
+
+    function animateHitBall(now) {
+      const t = Math.min((now - startTime) / duration, 1);
+
+      hitBall.position.x = start.x + (target.x - start.x) * t;
+      hitBall.position.z = start.z + (target.z - start.z) * t;
+      // Parabolic arc
+      hitBall.position.y = start.y + (target.y - start.y) * t + peakY * Math.sin(Math.PI * t);
+
+      if (t < 1) {
+        hitBallRAF = requestAnimationFrame(animateHitBall);
+      } else {
+        // Ball landed — roll away from batter (home plate) and decelerate to a stop
+        hitBall.position.y = 0.22;
+        const rollStart = performance.now();
+        const rollDuration = 1400;
+        const landX = target.x, landZ = target.z;
+        // Direction away from home plate, normalised
+        const dx = target.x - start.x;
+        const dz = target.z - start.z;
+        const len = Math.sqrt(dx*dx + dz*dz) || 1;
+        const rollDist = 5.5; // units to roll after landing
+        const rollDX = (dx / len) * rollDist;
+        const rollDZ = (dz / len) * rollDist;
+        function rollBall(now2) {
+          const rt = Math.min((now2 - rollStart) / rollDuration, 1);
+          const progress = 1 - (1 - rt) * (1 - rt); // ease-out: starts fast, slows to stop
+          hitBall.position.x = landX + rollDX * progress;
+          hitBall.position.z = landZ + rollDZ * progress;
+          hitBall.position.y = 0.22;
+          if (rt < 1) hitBallRAF = requestAnimationFrame(rollBall);
+        }
+        hitBallRAF = requestAnimationFrame(rollBall);
+      }
+    }
+    hitBallRAF = requestAnimationFrame(animateHitBall);
+  }
+
   const ballLight = new THREE.PointLight(
     0xffffff,
     1.5,
@@ -1271,6 +1351,7 @@ canvas{
   function resetSwingPanel(){
     stopSwingMeter();
     swingMeterWrap.style.display = 'none';
+    swingPanel.classList.remove('meter-active');
     swingTriggerBtn.style.display = 'block';
     swingTriggerBtn.textContent = 'SWING';
     runTriggerBtn.style.display   = 'block';
@@ -1297,6 +1378,8 @@ canvas{
     const adv  = zoneAdv[zone];
     swingResult.textContent = hit;
     swingResult.style.color = zoneColors[zone];
+
+    if(hit !== 'FOUL') launchHitBall(hit);
 
     if(hit === 'FOUL'){
       setTimeout(() => {
@@ -1335,6 +1418,8 @@ canvas{
     // Update "Run to Next Base" label: at 3rd it says "Run Home"
     baseRunNextBtn.textContent = seg === 2 ? 'Run Home!' : 'Run to Next Base';
     modalOverlay.classList.add('visible');
+    hitBall.visible = false;
+    if (hitBallRAF) { cancelAnimationFrame(hitBallRAF); hitBallRAF = null; }
     if(atHome) showSwingPanel();
   }
 

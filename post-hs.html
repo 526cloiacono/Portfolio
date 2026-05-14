@@ -4,74 +4,253 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Post High School — Portfolio</title>
+
 <style>
+:root{
+  --blue:#004488;   /* Seton Hall Blue (official) */
+  --gray:#A2AAAD;   /* Seton Hall Gray (official) */
+  --bg:#000000;
+  --card:#0f1115;
+}
+
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;min-height:100%;background:#05070d;font-family:Arial,Helvetica,sans-serif;color:#eef0f5;}
-.page-wrap{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+
+body{
+  background:var(--bg);
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--gray);
+}
+
+.page-wrap{
+  max-width:1000px;
+  margin:0 auto;
+  padding:4rem 2rem;
+}
+
+/* BACK BUTTON */
 .back-btn{
-  display:inline-flex;align-items:center;gap:.6rem;
-  color:#C8972B;text-decoration:none;font-size:.82rem;
-  letter-spacing:.12em;text-transform:uppercase;
-  border:1px solid rgba(200,151,43,.4);
-  padding:.55rem 1.2rem;border-radius:4px;
-  transition:background .2s,color .2s;
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  color:var(--blue);
+  text-decoration:none;
+  font-size:.82rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  border:1px solid rgba(0,68,136,.4);
+  padding:.55rem 1.2rem;
+  border-radius:4px;
   margin-bottom:3rem;
 }
-.back-btn:hover{background:rgba(200,151,43,.12);}
+
+.back-btn:hover{
+  background:rgba(0,68,136,.12);
+}
+
+/* BADGE */
 .badge{
   display:inline-block;
-  background:rgba(200,151,43,.12);
-  border:1px solid rgba(200,151,43,.4);
-  color:#C8972B;font-size:.72rem;letter-spacing:.18em;
-  text-transform:uppercase;padding:.4rem 1rem;
-  border-radius:50px;margin-bottom:1.5rem;
+  background:rgba(0,68,136,.15);
+  border:1px solid rgba(0,68,136,.35);
+  color:var(--blue);
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:.4rem 1rem;
+  border-radius:50px;
+  margin-bottom:1.5rem;
 }
+
+/* HERO */
+.hero-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:2rem;
+  margin-bottom:3rem;
+}
+
+.hero-text{flex:1;}
+
 h1{
   font-size:clamp(2.8rem,8vw,6rem);
-  line-height:.95;letter-spacing:.04em;
-  text-transform:uppercase;margin-bottom:1.5rem;
+  line-height:.95;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:1rem;
+  color:var(--gray);
 }
-h1 span{color:#C8972B;}
-.sub{color:#9aabb8;font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:3rem;}
-.divider{width:60px;height:2px;background:#C8972B;margin-bottom:3rem;}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
+
+h1 span{
+  color:var(--blue);
+}
+
+.sub{
+  color:var(--gray);
+  opacity:.85;
+  font-size:1rem;
+  line-height:1.7;
+  max-width:650px;
+}
+
+/* LOGO */
+.hero-image{
+  flex:0 0 280px;
+}
+
+.hero-image img{
+  width:100%;
+  height:280px;
+  object-fit:contain;
+  background:var(--card);
+  padding:18px;
+  border-radius:14px;
+  border:1px solid rgba(0,68,136,.3);
+}
+
+/* DIVIDER */
+.divider{
+  width:70px;
+  height:3px;
+  background:var(--blue);
+  margin:3rem 0;
+}
+
+/* GRID */
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:1.5rem;
+}
+
 .card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(200,151,43,.15);
-  border-radius:8px;padding:1.6rem;
+  background:var(--card);
+  border:1px solid rgba(162,170,173,.2);
+  border-radius:12px;
+  overflow:hidden;
+  transition:.2s ease;
 }
-.card h3{font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:#C8972B;margin-bottom:.6rem;}
-.card p{font-size:.88rem;color:#9aabb8;line-height:1.6;}
-.glow{
-  display:inline-block;
-  color:#C8972B;
-  text-shadow:0 0 20px rgba(200,151,43,.6);
+
+.card:hover{
+  transform:translateY(-4px);
+  border-color:var(--blue);
+}
+
+.card img{
+  width:100%;
+  height:150px;
+  object-fit:contain;
+  background:var(--card);
+  padding:12px;
+}
+
+.card-content{
+  padding:1.2rem;
+}
+
+.card h3{
+  font-size:.95rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--blue);
+  margin-bottom:.5rem;
+}
+
+.card p{
+  font-size:.85rem;
+  color:var(--gray);
+  opacity:.85;
+  line-height:1.6;
+}
+
+/* RESPONSIVE */
+@media(max-width:950px){
+  .card-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+@media(max-width:500px){
+  .card-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
-<body>
-<div class="page-wrap">
-  <a href="index.html" class="back-btn">&#8592; Back to Field</a>
 
-  <div class="badge">Pitcher's Mound</div>
-  <h1>Post <span class="glow">High School</span></h1>
-  <p class="sub">From the mound — the next chapter after graduation. College, career, and the future are all in reach from here.</p>
+<body>
+
+<div class="page-wrap">
+
+  <a href="index.html" class="back-btn">← Back to Field</a>
+
+  <div class="badge">The Next Inning</div>
+
+  <!-- HERO -->
+  <div class="hero-row">
+
+    <div class="hero-text">
+
+      <h1>Post <span>High School</span></h1>
+
+      <p class="sub">
+        The next chapter takes me to Seton Hall University, where I will study Business and join
+        the Buccino Leadership Institute. This is where I take everything from baseball,
+        discipline, and teamwork into the business world and start building my future.
+      </p>
+
+    </div>
+
+    <div class="hero-image">
+      <img src="pirates.png" alt="Seton Hall Logo">
+    </div>
+
+  </div>
+
   <div class="divider"></div>
 
+  <!-- CARDS -->
   <div class="card-grid">
+
     <div class="card">
-      <h3>College Plans</h3>
-      <p>Share where you're headed after graduation — your college, major, and what excites you about the next chapter in your education.</p>
+      <img src="/mnt/data/bcd7eb60-e066-44e7-94fb-d2497d1a746a.png">
+      <div class="card-content">
+        <h3>Seton Hall University</h3>
+        <p>
+          Attending Seton Hall University in South Orange, New Jersey, joining a strong academic and leadership community.
+        </p>
+      </div>
     </div>
+
     <div class="card">
-      <h3>Career Goals</h3>
-      <p>Describe the career you're building toward — web development, UX design, software engineering, or wherever your passion leads.</p>
+      <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop">
+      <div class="card-content">
+        <h3>Business Major</h3>
+        <p>
+          Studying Business with a focus on leadership, management, and real-world decision making.
+        </p>
+      </div>
     </div>
+
     <div class="card">
-      <h3>Future Projects</h3>
-      <p>List the ideas, projects, and goals you're looking forward to pursuing once you step off the mound and into the real world.</p>
+      <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1200&auto=format&fit=crop">
+      <div class="card-content">
+        <h3>Buccino Leadership</h3>
+        <p>
+          Developing leadership skills through real-world experiences, teamwork, and professional training.
+        </p>
+      </div>
     </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop">
+      <div class="card-content">
+        <h3>Future Goals</h3>
+        <p>
+          Combining business knowledge, leadership, and discipline from sports to build my career path.
+        </p>
+      </div>
+    </div>
+
   </div>
+
 </div>
+
 </body>
 </html>

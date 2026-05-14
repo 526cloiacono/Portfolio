@@ -1,72 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Before High School — Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;min-height:100%;background:#05070d;font-family:Arial,Helvetica,sans-serif;color:#eef0f5;}
-.page-wrap{max-width:900px;margin:0 auto;padding:4rem 2rem;}
-.back-btn{
-  display:inline-flex;align-items:center;gap:.6rem;
-  color:#C8972B;text-decoration:none;font-size:.82rem;
-  letter-spacing:.12em;text-transform:uppercase;
-  border:1px solid rgba(200,151,43,.4);
-  padding:.55rem 1.2rem;border-radius:4px;
-  transition:background .2s,color .2s;
-  margin-bottom:3rem;
+html{scroll-behavior:smooth;}
+
+body{
+  background:#05070d;
+  color:#eef0f5;
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
 }
-.back-btn:hover{background:rgba(200,151,43,.12);}
+
+.bg-glow{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(200,151,43,.12), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(200,151,43,.08), transparent 35%);
+  z-index:-1;
+}
+
+.page-wrap{
+  max-width:1200px;
+  margin:auto;
+  padding:3rem 2rem 6rem;
+}
+
+.back-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  color:#C8972B;
+  text-decoration:none;
+  font-size:.82rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  border:1px solid rgba(200,151,43,.35);
+  padding:.7rem 1.3rem;
+  border-radius:5px;
+  margin-bottom:4rem;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:3rem;
+  align-items:center;
+  margin-bottom:7rem;
+}
+
 .badge{
   display:inline-block;
-  background:rgba(200,151,43,.12);
+  padding:.45rem 1rem;
+  border-radius:50px;
   border:1px solid rgba(200,151,43,.4);
-  color:#C8972B;font-size:.72rem;letter-spacing:.18em;
-  text-transform:uppercase;padding:.4rem 1rem;
-  border-radius:50px;margin-bottom:1.5rem;
+  background:rgba(200,151,43,.08);
+  color:#C8972B;
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
 }
-h1{
-  font-size:clamp(2.8rem,8vw,6rem);
-  line-height:.95;letter-spacing:.04em;
-  text-transform:uppercase;margin-bottom:1.5rem;
+
+.hero h1{
+  font-size:clamp(3rem,9vw,7rem);
+  line-height:.92;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:1.5rem;
 }
-h1 span{color:#C8972B;}
-.sub{color:#9aabb8;font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:3rem;}
-.divider{width:60px;height:2px;background:#C8972B;margin-bottom:3rem;}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
-.card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(200,151,43,.15);
-  border-radius:8px;padding:1.6rem;
+
+.hero h1 span{color:#C8972B;}
+
+.hero p{
+  color:#9aabb8;
+  font-size:1rem;
+  line-height:1.8;
 }
-.card h3{font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:#C8972B;margin-bottom:.6rem;}
-.card p{font-size:.88rem;color:#9aabb8;line-height:1.6;}
+
+.hero-image img{
+  width:100%;
+  height:500px;
+  object-fit:cover;
+  border-radius:18px;
+}
+
+.section-title{
+  color:#C8972B;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  margin:4rem 0 2rem;
+}
+
+.timeline{
+  display:flex;
+  flex-direction:column;
+  gap:2rem;
+}
+
+.timeline-card{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.timeline-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.timeline-content{
+  padding:2rem;
+}
+
+.timeline-content h2{
+  text-transform:uppercase;
+  margin-bottom:1rem;
+}
+
+.timeline-content h2 span{
+  color:#C8972B;
+}
+
+.timeline-content p{
+  color:#9aabb8;
+  line-height:1.8;
+}
+
+.memory-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.5rem;
+  margin-top:2rem;
+}
+
+.memory-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+  min-height:360px;
+}
+
+.memory-card img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.memory-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(5,7,13,.96), rgba(5,7,13,.2));
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:2rem;
+}
+
+.memory-overlay h3{
+  text-transform:uppercase;
+  color:#fff;
+  margin-bottom:.5rem;
+}
+
+.memory-overlay p{
+  color:#c6d0da;
+  font-size:.9rem;
+  line-height:1.6;
+}
+
+.quote{
+  text-align:center;
+  margin-top:6rem;
+}
+
+.quote h2{
+  text-transform:uppercase;
+  font-size:clamp(2rem,5vw,4rem);
+}
+
+.quote span{
+  color:#C8972B;
+}
 </style>
 </head>
+
 <body>
+
+<div class="bg-glow"></div>
+
 <div class="page-wrap">
-  <a href="index.html" class="back-btn">&#8592; Back to Field</a>
 
-  <div class="badge">Home Plate</div>
-  <h1>Before <span>High School</span></h1>
-  <p class="sub">The foundation — early curiosity, creativity, and the first sparks of interest in technology and design before the high school journey began.</p>
-  <div class="divider"></div>
+<a href="index.html" class="back-btn">← Back to Field</a>
 
-  <div class="card-grid">
-    <div class="card">
-      <h3>Early Interests</h3>
-      <p>Add your early experiences, hobbies, and what drew you toward technology and creative work before high school.</p>
-    </div>
-    <div class="card">
-      <h3>Skills & Curiosity</h3>
-      <p>Describe the foundational skills or subjects you explored — art, computers, math — that set the stage for your future path.</p>
-    </div>
-    <div class="card">
-      <h3>Memorable Moments</h3>
-      <p>Share any defining moments, projects, or influences from your early years that shaped who you are today.</p>
+<!-- HERO -->
+<section class="hero">
+
+  <div>
+    <div class="badge">Home Plate</div>
+
+    <h1>Before <span>High School</span></h1>
+
+    <p>
+      Before high school, life was simple in the best way. I was a little kid running around with a glove,
+      playing baseball almost every day, and just enjoying being outside. Most of my time was split between
+      school, baseball, and being with my family — my mom, dad, and brother — who were always part of everything I did.
+    </p>
+  </div>
+
+  <div class="hero-image">
+    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop">
+  </div>
+
+</section>
+
+<div class="section-title">Early Life</div>
+
+<section class="timeline">
+
+  <!-- BASEBALL -->
+  <div class="timeline-card">
+    <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop">
+    <div class="timeline-content">
+      <h2><span>Baseball</span> Was Everything</h2>
+      <p>
+        Baseball was the biggest part of my childhood. I played third base, which always kept me locked in every play.
+        I liked the pressure of it — fast ground balls, quick throws, and having to stay focused every pitch.
+        It taught me how to react fast and not overthink things.
+      </p>
     </div>
   </div>
+
+  <!-- FAMILY -->
+  <div class="timeline-card">
+    <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1200&auto=format&fit=crop">
+    <div class="timeline-content">
+      <h2><span>Family</span> Always There</h2>
+      <p>
+        My mom, dad, and brother were always around supporting me. Whether it was games, practices,
+        or just normal everyday life, they were part of everything. Some of my best memories are simple ones —
+        talking after games, traveling, and just laughing at random moments.
+      </p>
+    </div>
+  </div>
+
+  <!-- KID LIFE -->
+  <div class="timeline-card">
+    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop">
+    <div class="timeline-content">
+      <h2><span>Just a Kid</span> Having Fun</h2>
+      <p>
+        Before high school I was just a funny, energetic kid who liked being outside and staying busy.
+        I didn’t really think about the future — I just played baseball, hung out with friends,
+        and tried to enjoy everything while it was happening.
+      </p>
+    </div>
+  </div>
+
+</section>
+
+<div class="section-title">Memories</div>
+
+<section class="memory-grid">
+
+  <div class="memory-card">
+    <img src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?q=80&w=1200&auto=format&fit=crop">
+    <div class="memory-overlay">
+      <h3>First Teams</h3>
+      <p>Learning the game, making friends, and competing in baseball from a young age.</p>
+    </div>
+  </div>
+
+  <div class="memory-card">
+    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop">
+    <div class="memory-overlay">
+      <h3>Family Time</h3>
+      <p>Being with my mom, dad, and brother and just enjoying normal everyday life.</p>
+    </div>
+  </div>
+
+  <div class="memory-card">
+    <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=1200&auto=format&fit=crop">
+    <div class="memory-overlay">
+      <h3>Growing Up</h3>
+      <p>Simple childhood moments that slowly shaped who I am today.</p>
+    </div>
+  </div>
+
+</section>
+
+<section class="quote">
+  <h2>It all started with <span>baseball, family, and being a kid.</span></h2>
+</section>
+
 </div>
 </body>
 </html>

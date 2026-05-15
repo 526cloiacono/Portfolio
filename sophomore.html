@@ -3,70 +3,353 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Sophomore Year — Portfolio</title>
+<title>Sophomore Year — Projects</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;min-height:100%;background:#05070d;font-family:Arial,Helvetica,sans-serif;color:#eef0f5;}
-.page-wrap{max-width:900px;margin:0 auto;padding:4rem 2rem;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#05070d;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#eef0f5;
+}
+
+.page-wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:4rem 2rem;
+}
+
+/* BACK BUTTON */
 .back-btn{
-  display:inline-flex;align-items:center;gap:.6rem;
-  color:#C8972B;text-decoration:none;font-size:.82rem;
-  letter-spacing:.12em;text-transform:uppercase;
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  color:#C8972B;
+  text-decoration:none;
+  font-size:.82rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
   border:1px solid rgba(200,151,43,.4);
-  padding:.55rem 1.2rem;border-radius:4px;
-  transition:background .2s,color .2s;
+  padding:.55rem 1.2rem;
+  border-radius:4px;
   margin-bottom:3rem;
 }
-.back-btn:hover{background:rgba(200,151,43,.12);}
+
+.back-btn:hover{
+  background:rgba(200,151,43,.12);
+}
+
+/* BADGE */
 .badge{
   display:inline-block;
   background:rgba(200,151,43,.12);
   border:1px solid rgba(200,151,43,.4);
-  color:#C8972B;font-size:.72rem;letter-spacing:.18em;
-  text-transform:uppercase;padding:.4rem 1rem;
-  border-radius:50px;margin-bottom:1.5rem;
+  color:#C8972B;
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:.4rem 1rem;
+  border-radius:50px;
+  margin-bottom:1.5rem;
 }
+
+/* TITLE */
 h1{
-  font-size:clamp(2.8rem,8vw,6rem);
-  line-height:.95;letter-spacing:.04em;
-  text-transform:uppercase;margin-bottom:1.5rem;
+  font-size:clamp(3rem,8vw,6rem);
+  line-height:.95;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  margin-bottom:1.2rem;
 }
-h1 span{color:#C8972B;}
-.sub{color:#9aabb8;font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:3rem;}
-.divider{width:60px;height:2px;background:#C8972B;margin-bottom:3rem;}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
-.card{
+
+h1 span{
+  color:#C8972B;
+}
+
+.sub{
+  color:#9aabb8;
+  font-size:1rem;
+  line-height:1.7;
+  max-width:700px;
+  margin-bottom:3rem;
+}
+
+.divider{
+  width:70px;
+  height:2px;
+  background:#C8972B;
+  margin-bottom:3rem;
+}
+
+/* FEATURED PROJECT */
+.featured-project{
+  position:relative;
+  height:500px;
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:2rem;
+  border:1px solid rgba(200,151,43,.2);
+}
+
+.featured-project img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.feature-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.92), rgba(0,0,0,.1));
+  display:flex;
+  align-items:flex-end;
+  padding:2.5rem;
+}
+
+.feature-content h2{
+  color:#C8972B;
+  font-size:2.4rem;
+  text-transform:uppercase;
+  margin-bottom:1rem;
+  letter-spacing:.05em;
+}
+
+.feature-content p{
+  color:#c5ccd4;
+  max-width:650px;
+  line-height:1.8;
+  margin-bottom:1.3rem;
+}
+
+.project-btn{
+  display:inline-block;
+  padding:.8rem 1.5rem;
+  border:1px solid rgba(200,151,43,.4);
+  color:#C8972B;
+  text-decoration:none;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  font-size:.8rem;
+  border-radius:4px;
+}
+
+.project-btn:hover{
+  background:rgba(200,151,43,.12);
+}
+
+/* PROJECT GRID */
+.project-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+
+.project-card{
   background:rgba(255,255,255,.04);
   border:1px solid rgba(200,151,43,.15);
-  border-radius:8px;padding:1.6rem;
+  border-radius:12px;
+  overflow:hidden;
+  transition:.2s ease;
 }
-.card h3{font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:#C8972B;margin-bottom:.6rem;}
-.card p{font-size:.88rem;color:#9aabb8;line-height:1.6;}
+
+.project-card:hover{
+  transform:translateY(-6px);
+  border-color:#C8972B;
+}
+
+.project-card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.project-content{
+  padding:1.4rem;
+}
+
+.project-content h3{
+  color:#C8972B;
+  font-size:1rem;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  margin-bottom:.6rem;
+}
+
+.project-content p{
+  color:#9aabb8;
+  font-size:.9rem;
+  line-height:1.7;
+  margin-bottom:1rem;
+}
+
+.project-link{
+  color:#C8972B;
+  text-decoration:none;
+  text-transform:uppercase;
+  font-size:.78rem;
+  letter-spacing:.1em;
+}
+
+/* MOBILE */
+@media(max-width:1000px){
+  .project-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:700px){
+
+  .featured-project{
+    height:380px;
+  }
+
+  .feature-content h2{
+    font-size:1.8rem;
+  }
+
+  .project-grid{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="page-wrap">
-  <a href="index.html" class="back-btn">&#8592; Back to Field</a>
+
+  <a href="index.html" class="back-btn">← Back to Field</a>
 
   <div class="badge">1st Base</div>
-  <h1>Sophomore <span>Year</span></h1>
-  <p class="sub">Rounding first — sophomore year brought new challenges, expanded skills, and growing confidence in web design and development.</p>
+
+  <h1>Sophomore <span>Projects</span></h1>
+
+  <p class="sub">
+    Sophomore year was where I really started improving my web design and development skills.
+    These projects helped me learn layout design, creativity, coding structure, and responsive websites.
+  </p>
+
   <div class="divider"></div>
 
-  <div class="card-grid">
-    <div class="card">
-      <h3>Projects</h3>
-      <p>Add the projects you built during sophomore year — websites, designs, or assignments that pushed your abilities forward.</p>
+  <!-- FEATURED PROJECT -->
+  <div class="featured-project">
+
+    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop">
+
+    <div class="feature-overlay">
+
+      <div class="feature-content">
+
+        <h2>Featured Project</h2>
+
+        <p>
+          My featured project from sophomore year. This was one of the first projects where I
+          focused heavily on design, layout structure, responsiveness, and overall presentation.
+        </p>
+
+        <a href="#" class="project-btn">View Project</a>
+
+      </div>
+
     </div>
-    <div class="card">
-      <h3>Skills Learned</h3>
-      <p>List the new skills and tools you picked up — HTML, CSS, JavaScript, design software, or anything else you started mastering.</p>
-    </div>
-    <div class="card">
-      <h3>Highlights</h3>
-      <p>Share standout moments, achievements, or breakthroughs from your sophomore year that you're proud of.</p>
-    </div>
+
   </div>
+
+  <!-- PROJECTS -->
+  <div class="project-grid">
+
+    <div class="project-card">
+      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop">
+
+      <div class="project-content">
+        <h3>Portfolio Website</h3>
+
+        <p>
+          Designed and developed a personal portfolio focused on layout, branding, and cleaner user experience.
+        </p>
+
+        <a href="#" class="project-link">Explore Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop">
+
+      <div class="project-content">
+        <h3>Responsive Design</h3>
+
+        <p>
+          Practiced mobile-friendly layouts and responsive website structures using HTML and CSS.
+        </p>
+
+        <a href="#" class="project-link">Explore Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop">
+
+      <div class="project-content">
+        <h3>Creative Coding</h3>
+
+        <p>
+          Experimented with interactive layouts, animations, and modern visual web design ideas.
+        </p>
+
+        <a href="#" class="project-link">Explore Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <img src="https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?q=80&w=1200&auto=format&fit=crop">
+
+      <div class="project-content">
+        <h3>UI Concepts</h3>
+
+        <p>
+          Created cleaner interfaces and explored better spacing, typography, and visual hierarchy.
+        </p>
+
+        <a href="#" class="project-link">Explore Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1200&auto=format&fit=crop">
+
+      <div class="project-content">
+        <h3>Design Practice</h3>
+
+        <p>
+          Improved design consistency and learned how to organize projects into professional layouts.
+        </p>
+
+        <a href="#" class="project-link">Explore Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop">
+
+      <div class="project-content">
+        <h3>Web Experiments</h3>
+
+        <p>
+          Tried different coding ideas, visual effects, and project styles to improve creativity.
+        </p>
+
+        <a href="#" class="project-link">Explore Project →</a>
+      </div>
+    </div>
+
+  </div>
+
 </div>
+
 </body>
 </html>
